@@ -1,6 +1,6 @@
 import { site } from "@/content/site";
 import { formattedAddress, telUrl } from "@/lib/booking";
-import { InstagramIcon } from "./Icons";
+import SocialLinks from "./SocialLinks";
 
 export default function Footer() {
   const address = formattedAddress();
@@ -36,15 +36,10 @@ export default function Footer() {
                 {site.contact.phoneDisplay}
               </a>
             </p>
-            <a
-              href={site.contact.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center gap-2 transition-colors hover:text-rose"
-            >
-              <InstagramIcon className="h-4 w-4" />
-              {site.contact.instagramHandle}
-            </a>
+            <SocialLinks
+              className="flex flex-col"
+              itemClassName="inline-flex min-h-11 items-center gap-2 transition-colors hover:text-rose"
+            />
           </div>
         </div>
 

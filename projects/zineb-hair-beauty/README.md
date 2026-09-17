@@ -32,6 +32,7 @@ replaced, the site runs fine but shows stand-in values:
 | Prices | `price` on any service | omitted → price column hidden |
 | Photos | `gallery[].src` | empty → gradient placeholders |
 | Reviews | `testimonials` | empty → **whole section hidden** |
+| TikTok account | `socials` → `platform: "tiktok"` | empty → **hidden everywhere** |
 | Final domain | `url` | `https://example.com` |
 
 Two things worth stressing:
@@ -40,6 +41,32 @@ Two things worth stressing:
   `tel:` link is generated from it. This is the single most important value in the file.
 - **Only add real reviews** to `testimonials`, with the person's permission. The section
   stays hidden while the array is empty, so there's no pressure to invent any.
+
+### Social accounts
+
+`socials` in `content/site.ts` drives every social link on the site — hero, gallery
+header, contact card, footer, and the `sameAs` field in the search-engine markup. Set
+the URL once and all five update together:
+
+```ts
+const socials: Social[] = [
+  { platform: "instagram", url: "https://www.instagram.com/zineb_hair_beauty/", handle: "@zineb_hair_beauty" },
+  { platform: "tiktok",    url: "https://www.tiktok.com/@…",                    handle: "@…" },
+];
+```
+
+The Instagram account is the client's, confirmed. **The TikTok entry is blank** —
+fill in the real profile URL and handle. An entry with an empty `url` is filtered out
+everywhere, so the site never shows a dead link; there's no need to delete the row
+while the account is still being set up.
+
+The array order is the display order. To add Facebook or Pinterest later: add the
+platform to the `Social` type, add its icon to `components/Icons.tsx`, register it in
+the two maps at the top of `components/SocialLinks.tsx`, then add a row here.
+
+Each link's accessible name is the platform plus the handle ("Instagram :
+@zineb_hair_beauty"), because both accounts may share the same handle — on screen the
+icon distinguishes them, but read aloud they would otherwise be identical.
 
 The service list, descriptions and durations are written as a sensible starting point
 for a salon of this type. Read them with the client and adjust — they're normal copy,
@@ -134,6 +161,8 @@ These are deliberate; please keep them if you edit the components.
 - `prefers-reduced-motion: reduce` disables the reveals and smooth scrolling.
 - The sticky mobile booking bar sets `tabindex="-1"` while off-screen so it isn't a
   keyboard trap, and respects `env(safe-area-inset-bottom)` on notched phones.
+- Social links are named by platform, not just handle, so two accounts sharing a
+  handle don't read identically.
 - `LocalBusiness`/`HairSalon` JSON-LD is generated in `app/layout.tsx` from
   `content/site.ts` — hours, phone and Instagram flow straight from the content file
   into Google's rich results. It gets more useful once the address is filled in.
@@ -149,7 +178,7 @@ app/
   globals.css     design tokens + reveal animation
   icon.svg        favicon
   sitemap.ts / robots.ts
-components/       one file per section, plus Photo / Reveal / Icons
+components/       one file per section, plus Photo / Reveal / Icons / SocialLinks
 content/site.ts   ← all editable content
 lib/booking.ts    WhatsApp + tel link builders, hours helpers
 ```

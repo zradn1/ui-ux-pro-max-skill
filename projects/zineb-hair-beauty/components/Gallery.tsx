@@ -1,5 +1,5 @@
 import { site } from "@/content/site";
-import { InstagramIcon, ArrowIcon } from "./Icons";
+import SocialLinks from "./SocialLinks";
 import Photo from "./Photo";
 import Reveal from "./Reveal";
 
@@ -17,16 +17,12 @@ export default function Gallery() {
                 Quelques réalisations
               </h2>
             </div>
-            <a
-              href={site.contact.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex min-h-11 items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-rose"
-            >
-              <InstagramIcon className="h-4 w-4" />
-              Tout voir sur Instagram
-              <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </a>
+            <SocialLinks
+              variant="label"
+              prefix="Tout voir sur"
+              className="flex flex-wrap items-center gap-x-6 gap-y-2"
+              itemClassName="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-rose"
+            />
           </div>
         </Reveal>
 

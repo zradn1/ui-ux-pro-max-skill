@@ -31,6 +31,36 @@ export type Testimonial = {
   author: string;
 };
 
+/** Réseau social affiché sur le site. `url` vide = entrée ignorée partout. */
+export type Social = {
+  platform: "instagram" | "tiktok";
+  url: string;
+  /** Affiché à l'écran, ex. « @zineb_hair_beauty ». */
+  handle: string;
+};
+
+/* ── Réseaux sociaux ─────────────────────────────────────────────────────────
+   L'ordre ici est l'ordre d'affichage sur tout le site.
+   Une entrée dont `url` est vide est automatiquement masquée — pas besoin de
+   la supprimer tant que le compte n'existe pas.
+   Pour ajouter un réseau (Facebook, Pinterest…), ajoutez son icône dans
+   components/Icons.tsx puis référencez-la dans components/SocialLinks.tsx.
+   ─────────────────────────────────────────────────────────────────────────── */
+const socials: Social[] = [
+  {
+    platform: "instagram",
+    url: "https://www.instagram.com/zineb_hair_beauty/",
+    handle: "@zineb_hair_beauty",
+  },
+  {
+    // À COMPLÉTER — URL complète du profil TikTok et pseudo affiché.
+    // Tant que `url` est vide, TikTok n'apparaît nulle part sur le site.
+    platform: "tiktok",
+    url: "",
+    handle: "",
+  },
+];
+
 /* ── Prestations ─────────────────────────────────────────────────────────────
    Adaptez librement : ajoutez, renommez ou supprimez groupes et lignes.
    ─────────────────────────────────────────────────────────────────────────── */
@@ -159,8 +189,6 @@ export const site = {
     phoneDisplay: "+212 6 00 00 00 00",
     // À COMPLÉTER — laisser vide ("") pour masquer le bouton e-mail
     email: "",
-    instagram: "https://www.instagram.com/zineb_hair_beauty/",
-    instagramHandle: "@zineb_hair_beauty",
     /** Message pré-rempli à l'ouverture de WhatsApp. */
     whatsappMessage:
       "Bonjour Zineb Hair & Beauty 👋 Je souhaite prendre rendez-vous.",
@@ -214,6 +242,9 @@ export const site = {
       { value: "", label: "Clientes accompagnées" },
     ],
   },
+
+  /* ── Réseaux sociaux (voir le tableau `socials` plus haut) ─────────────── */
+  socials,
 
   /* ── Prestations (voir le tableau `services` plus haut) ──────────────── */
   services,

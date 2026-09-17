@@ -1,6 +1,6 @@
 import { site } from "@/content/site";
 import { whatsappUrl } from "@/lib/booking";
-import { ArrowIcon } from "./Icons";
+import { WhatsAppIcon } from "./Icons";
 import Reveal from "./Reveal";
 
 export default function Services() {
@@ -36,12 +36,21 @@ export default function Services() {
                         href={whatsappUrl(`${group.title} — ${item.name}`)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex min-h-16 items-start justify-between gap-6 py-6 transition-colors hover:bg-blush/40"
+                        // Toute la ligne est cliquable. `active:` double le
+                        // survol pour le tactile, où il n'existe pas.
+                        className="group flex min-h-16 items-start justify-between gap-4 py-6 pr-1 pl-1 -mx-1 rounded-xl transition-colors hover:bg-blush/40 active:bg-blush/70 sm:gap-6"
                       >
                         <div className="min-w-0">
                           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                            <span className="font-medium text-ink transition-colors group-hover:text-rose">
+                            <span className="font-medium text-ink transition-colors group-hover:text-rose group-active:text-rose">
                               {item.name}
+                              {/* Complète le nom annoncé par les lecteurs
+                                  d'écran sans l'écraser : la description
+                                  visible reste lue. */}
+                              <span className="sr-only">
+                                {" "}
+                                — réserver sur WhatsApp
+                              </span>
                             </span>
                             {item.duration && (
                               <span className="text-xs uppercase tracking-wider text-muted">
@@ -60,8 +69,12 @@ export default function Services() {
                               {item.price}
                             </span>
                           )}
-                          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line text-muted transition-all group-hover:border-rose group-hover:bg-rose group-hover:text-white">
-                            <ArrowIcon className="h-4 w-4" />
+                          {/*
+                            Icône WhatsApp plutôt qu'une flèche : elle dit où
+                            mène le clic avant qu'on clique.
+                          */}
+                          <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line text-muted transition-all group-hover:border-rose group-hover:bg-rose group-hover:text-white group-active:border-rose group-active:bg-rose group-active:text-white">
+                            <WhatsAppIcon className="h-4 w-4" />
                           </span>
                         </div>
                       </a>

@@ -5,11 +5,12 @@ const digits = (value: string) => value.replace(/\D/g, "");
 
 /**
  * Lien WhatsApp avec message pré-rempli.
- * `context` permet de préciser la prestation depuis laquelle on a cliqué.
+ * `context` précise la prestation depuis laquelle on a cliqué, au format
+ * « CATÉGORIE — PRESTATION », sur la ligne suivant la salutation.
  */
 export function whatsappUrl(context?: string) {
   const base = site.contact.whatsappMessage;
-  const text = context ? `${base}\n\nPrestation : ${context}` : base;
+  const text = context ? `${base}\nPrestation : ${context}` : base;
   return `https://wa.me/${digits(site.contact.phoneE164)}?text=${encodeURIComponent(text)}`;
 }
 

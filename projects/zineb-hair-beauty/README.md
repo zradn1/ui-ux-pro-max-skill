@@ -31,6 +31,7 @@ replaced, the site runs fine but shows stand-in values:
 | Opening hours | `hours` | Mon–Sat 09:00–19:00, Sun closed — **confirm with the salon** |
 | Prices | `price` on any service | omitted → price column hidden |
 | Photos | `gallery[].src` | empty → gradient placeholders |
+| Logo file | `logo.src` | empty → **typographic fallback** |
 | Reviews | `testimonials` | empty → **whole section hidden** |
 | TikTok account | `socials` → `platform: "tiktok"` | empty → **hidden everywhere** |
 | TikTok videos | `tiktokVideos` | empty → **video block hidden** |
@@ -105,6 +106,42 @@ icon distinguishes them, but read aloud they would otherwise be identical.
 The service list, descriptions and durations are written as a sensible starting point
 for a salon of this type. Read them with the client and adjust — they're normal copy,
 not facts I verified about this business.
+
+### Adding the logo
+
+Drop the file in `public/` and point `logo.src` at it:
+
+```ts
+logo: {
+  src: "/logo.svg",
+  width: 2000, height: 654,   // the file's real pixel size
+  whiteBackground: false,
+},
+```
+
+`width`/`height` must match the file's real dimensions — they reserve the space
+while it loads so the header doesn't jump. Until `src` is set, the header and footer
+fall back to a typographic "Zineb. HAIR & BEAUTY" set in the site's own fonts, so
+nothing looks broken in the meantime.
+
+**Supply the logo with a transparent background — SVG for preference.** The page sits
+on cream (`#FBF6F2`), so a file with a baked-in white background shows as a white
+rectangle. If all you have is a flattened PNG or JPEG, set `whiteBackground: true`:
+the logo is then placed on a deliberate white rounded chip, which reads as a design
+choice instead of an accident. That's a stopgap, not the fix.
+
+I first tried `mix-blend-mode: multiply` for this, which normally drops white out.
+It does not work here: the header is `position: fixed` with a `z-index`, so it forms
+its own stacking context and the image has nothing behind it to blend against — the
+white stayed visible. Hence the chip.
+
+Still to do once the real file is in place:
+- **Favicon** — `app/icon.svg` is a stand-in "Z". Replace it with the logo's monogram
+  (the Z-and-profile mark alone, not the full horizontal lockup, which is illegible at
+  32px).
+- **Share image** — add `app/opengraph-image.png` (1200×630) so links shared on
+  WhatsApp and Instagram show the brand rather than a blank card. This matters here:
+  the site's whole booking flow runs through WhatsApp.
 
 ### Adding photos
 
@@ -214,8 +251,8 @@ app/
   globals.css     design tokens + reveal animation
   icon.svg        favicon
   sitemap.ts / robots.ts
-components/       one file per section, plus Photo / Reveal / Icons / SocialLinks /
-                  TikTokEmbed
+components/       one file per section, plus Logo / Photo / Reveal / Icons /
+                  SocialLinks / TikTokEmbed
 content/site.ts   ← all editable content
 lib/booking.ts    WhatsApp + tel link builders, hours helpers
 lib/tiktok.ts     TikTok URL → video ID, embed URL

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { site } from "@/content/site";
 import { whatsappUrl } from "@/lib/booking";
 import { WhatsAppIcon } from "./Icons";
+import Logo from "./Logo";
 
 const links = [
   { href: "#prestations", label: "Prestations" },
@@ -46,15 +47,9 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-5 sm:px-8">
-        <a
-          href="#"
-          className="font-display text-lg leading-tight tracking-tight text-ink sm:text-xl"
-        >
-          {site.shortName}
-          <span className="text-rose">.</span>
-          <span className="ml-2 hidden text-[0.7rem] font-sans font-medium uppercase tracking-[0.2em] text-muted sm:inline">
-            Hair &amp; Beauty
-          </span>
+        <a href="#" aria-label={`${site.name} — accueil`} className="flex items-center">
+          {/* `priority` : le logo est au-dessus de la ligne de flottaison. */}
+          <Logo priority className="h-8 w-auto sm:h-10" />
         </a>
 
         <nav aria-label="Navigation principale" className="hidden items-center gap-8 lg:flex">

@@ -207,6 +207,35 @@ export const site = {
   description:
     "Salon de coiffure et institut de beauté. Coupe, couleur, soins, coiffure de mariée, manucure et esthétique — sur rendez-vous.",
 
+  /* ── Logo ───────────────────────────────────────────────────────────────── */
+  /**
+   * À COMPLÉTER — déposez le fichier du logo dans /public puis indiquez son
+   * chemin ci-dessous. Tant que `src` est vide, le site affiche un repli
+   * typographique (« Zineb. HAIR & BEAUTY ») : rien n'est cassé en attendant.
+   *
+   * Format conseillé : SVG. Il reste net sur tous les écrans et pèse quelques
+   * kilo-octets. À défaut, un PNG à fond transparent d'au moins 1200 px de large.
+   */
+  logo: {
+    src: "",
+    /** Dimensions réelles du fichier, en pixels. Elles réservent la place
+     *  pendant le chargement et évitent que la page « saute ». */
+    width: 2000,
+    height: 654,
+    /**
+     * Le fichier DOIT idéalement avoir un fond transparent : c'est la seule
+     * façon que le logo se pose proprement sur le crème du site.
+     *
+     * Si vous n'avez qu'un fichier à fond blanc (JPEG, PNG aplati), mettez
+     * `true` : le logo est alors présenté sur une pastille blanche arrondie,
+     * ce qui se lit comme un choix graphique plutôt que comme un rectangle
+     * blanc oublié. C'est un dépannage, pas la bonne réponse — demandez le
+     * logo en SVG ou en PNG transparent dès que possible, puis repassez à
+     * `false`.
+     */
+    whiteBackground: false,
+  },
+
   /* ── Coordonnées ────────────────────────────────────────────────────────── */
   contact: {
     // À COMPLÉTER — format international, sans espaces, pour les liens tel:/WhatsApp

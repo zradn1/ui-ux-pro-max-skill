@@ -1,5 +1,6 @@
 import { site } from "@/content/site";
 import { formattedAddress, telUrl } from "@/lib/booking";
+import Logo from "./Logo";
 import SocialLinks from "./SocialLinks";
 
 export default function Footer() {
@@ -11,13 +12,7 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8">
         <div className="flex flex-col gap-10 sm:flex-row sm:justify-between">
           <div className="max-w-sm">
-            <p className="font-display text-xl text-ink">
-              {site.shortName}
-              <span className="text-rose">.</span>
-              <span className="ml-2 text-xs font-sans font-medium uppercase tracking-[0.2em] text-muted">
-                Hair &amp; Beauty
-              </span>
-            </p>
+            <Logo className="h-10 w-auto" />
             <p className="mt-4 text-sm leading-relaxed text-muted">
               {site.footer.note}
             </p>

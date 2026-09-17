@@ -203,6 +203,8 @@ export const site = {
   name: "Zineb Hair & Beauty",
   shortName: "Zineb",
   tagline: "Salon de coiffure & institut de beauté",
+  /** Signature de marque, reprise du logo. Vide = masquée. */
+  baseline: "Révélez votre beauté",
   /** Utilisé dans les balises SEO et le partage sur les réseaux. */
   description:
     "Salon de coiffure et institut de beauté. Coupe, couleur, soins, coiffure de mariée, manucure et esthétique — sur rendez-vous.",
@@ -217,11 +219,24 @@ export const site = {
    * kilo-octets. À défaut, un PNG à fond transparent d'au moins 1200 px de large.
    */
   logo: {
+    /**
+     * Version HORIZONTALE (lockup large, ~3:1) — utilisée dans l'en-tête.
+     * C'est la seule qui fonctionne dans une barre de 80 px de haut : une
+     * version carrée y ferait 40 px de large et serait illisible.
+     */
     src: "",
     /** Dimensions réelles du fichier, en pixels. Elles réservent la place
      *  pendant le chargement et évitent que la page « saute ». */
     width: 2000,
     height: 654,
+    /**
+     * Version CARRÉE / EMPILÉE (~1:1) — utilisée dans le pied de page, où la
+     * hauteur ne manque pas et où le logo complet a plus de présence.
+     * Laisser vide pour réutiliser la version horizontale partout.
+     */
+    stackedSrc: "",
+    stackedWidth: 1250,
+    stackedHeight: 1250,
     /**
      * Le fichier DOIT idéalement avoir un fond transparent : c'est la seule
      * façon que le logo se pose proprement sur le crème du site.

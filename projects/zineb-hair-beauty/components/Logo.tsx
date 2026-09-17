@@ -2,23 +2,34 @@ import Image from "next/image";
 import { site } from "@/content/site";
 
 /**
- * Logo du salon.
+ * Logo du salon, en deux déclinaisons.
  *
- * Tant qu'aucun fichier n'est renseigné dans `logo.src` (content/site.ts), on
- * retombe sur un repli typographique composé avec les polices du site. Le site
- * reste donc présentable avant la livraison du fichier ; le jour où il arrive,
- * il suffit de renseigner un chemin.
+ * - `horizontal` : le lockup large, pour l'en-tête. Une barre de 80 px ne
+ *   laisse pas la place à une version carrée, qui n'y ferait qu'une quarantaine
+ *   de pixels de large — illisible.
+ * - `stacked` : la version carrée, pour le pied de page, où la hauteur ne
+ *   manque pas. Si aucun fichier carré n'est fourni, on retombe sur l'horizontal.
+ *
+ * Tant qu'aucun fichier n'est renseigné, un repli typographique composé avec
+ * les polices du site prend le relais : rien n'est cassé en attendant.
  */
 export default function Logo({
+  variant = "horizontal",
   className = "h-9 w-auto",
   priority = false,
 }: {
+  variant?: "horizontal" | "stacked";
   className?: string;
   priority?: boolean;
 }) {
   const { logo } = site;
 
-  if (!logo.src) {
+  const useStacked = variant === "stacked" && Boolean(logo.stackedSrc);
+  const src = useStacked ? logo.stackedSrc : logo.src;
+  const width = useStacked ? logo.stackedWidth : logo.width;
+  const height = useStacked ? logo.stackedHeight : logo.height;
+
+  if (!src) {
     return (
       <span className="inline-flex items-baseline whitespace-nowrap">
         <span className="font-display text-lg leading-tight tracking-tight text-ink sm:text-xl">
@@ -34,10 +45,10 @@ export default function Logo({
 
   const image = (
     <Image
-      src={logo.src}
+      src={src}
       alt={site.name}
-      width={logo.width}
-      height={logo.height}
+      width={width}
+      height={height}
       priority={priority}
       // `w-auto` accompagne la hauteur imposée en classe : le rapport
       // largeur/hauteur est préservé et Next.js ne signale pas d'écart.

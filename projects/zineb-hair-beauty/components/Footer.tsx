@@ -12,7 +12,19 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8">
         <div className="flex flex-col gap-10 sm:flex-row sm:justify-between">
           <div className="max-w-sm">
-            <Logo className="h-10 w-auto" />
+            {/* Version carrée : le pied de page a la hauteur pour l'accueillir. */}
+            <Logo variant="stacked" className="h-24 w-auto sm:h-28" />
+            {/*
+              La version carrée du logo porte déjà la signature « Révélez votre
+              beauté ». On ne la répète en texte que lorsqu'elle n'est pas
+              affichée : sans fichier carré, le pied de page retombe sur le
+              lockup horizontal ou sur le repli typographique, qui ne la portent pas.
+            */}
+            {site.baseline && !site.logo.stackedSrc && (
+              <p className="mt-4 font-display text-base italic text-rose">
+                {site.baseline}
+              </p>
+            )}
             <p className="mt-4 text-sm leading-relaxed text-muted">
               {site.footer.note}
             </p>

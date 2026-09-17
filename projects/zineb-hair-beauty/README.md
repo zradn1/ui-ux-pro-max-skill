@@ -109,15 +109,26 @@ not facts I verified about this business.
 
 ### Adding the logo
 
-Drop the file in `public/` and point `logo.src` at it:
+There are **two slots**, because the two lockups suit different places:
 
 ```ts
 logo: {
-  src: "/logo.svg",
-  width: 2000, height: 654,   // the file's real pixel size
+  src: "/logo-horizontal.svg",       // ~3:1 lockup  → header
+  width: 2000, height: 654,          // the file's real pixel size
+  stackedSrc: "/logo-square.svg",    // ~1:1 lockup  → footer
+  stackedWidth: 1250, stackedHeight: 1250,
   whiteBackground: false,
 },
 ```
+
+Use the **horizontal** lockup in the header: the bar is 80px tall, and a square logo
+scaled to fit would be about 40px wide with unreadable text. Use the **square** one in
+the footer, where there's vertical room and the full mark has more presence (it renders
+at 112px). Leave `stackedSrc` empty to use the horizontal file everywhere.
+
+The square lockup already contains the "Révélez votre beauté" line, so the footer only
+prints `site.baseline` as text when no square file is set — otherwise it would say it
+twice.
 
 `width`/`height` must match the file's real dimensions — they reserve the space
 while it loads so the header doesn't jump. Until `src` is set, the header and footer

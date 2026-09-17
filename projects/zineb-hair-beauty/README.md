@@ -30,7 +30,7 @@ replaced, the site runs fine but shows stand-in values:
 | Street & city | `address.street`, `address.city` | empty → address block hidden |
 | Google Maps link | `address.mapsUrl` | empty → "Itinéraire" link hidden |
 | Opening hours | `hours` | ✅ Tue–Sun 12:00–22:00, Mon closed — confirmed |
-| Prices | `price` on any service | omitted → price column hidden |
+| Service descriptions | `services[].description` | 2 of 4 intentionally empty |
 | Photos | `gallery[].src` | empty → gradient placeholders |
 | Logo files | `logo.src` / `logo.stackedSrc` | ✅ both lockups in place |
 | Reviews | `testimonials` | empty → **whole section hidden** |
@@ -133,9 +133,27 @@ Each link's accessible name is the platform plus the handle ("Instagram :
 @zineb_hair_beauty"), because both accounts may share the same handle — on screen the
 icon distinguishes them, but read aloud they would otherwise be identical.
 
-The service list, descriptions and durations are written as a sensible starting point
-for a salon of this type. Read them with the client and adjust — they're normal copy,
-not facts I verified about this business.
+### Services
+
+`services` holds the salon's four confirmed services, flat — no categories, no prices,
+no durations. An earlier, longer list turned out not to match what the salon actually
+offers, so **do not add to this array without confirmation**.
+
+There are no `price` or `duration` fields at all any more. They were removed from the
+`Service` type rather than left empty, so there is nothing to accidentally fill with a
+guess.
+
+`description` is optional, and two of the four are deliberately blank:
+
+| Service | Description | Why |
+|---|---|---|
+| Balayage Ombré | ✅ | The name names the technique; describing it invents nothing |
+| Protéine | ✅ | Kept to what "protéine" means in hair care, nothing about protocol |
+| Soin cheveux | — | Already its own summary; anything more would specify a protocol |
+| Cils | — | Could be extensions, a lash lift or a tint — writing one would be a guess |
+
+The rows are built so a missing description simply closes up. If the salon tells you
+what "Cils" and "Soin cheveux" actually cover, add the text and it appears.
 
 ### The logo
 

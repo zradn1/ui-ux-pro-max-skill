@@ -1,0 +1,61 @@
+import { site } from "@/content/site";
+
+/** Numéro au format attendu par wa.me : chiffres uniquement, indicatif compris. */
+const digits = (value: string) => value.replace(/\D/g, "");
+
+/**
+ * Lien WhatsApp avec message pré-rempli.
+ * `context` permet de préciser la prestation depuis laquelle on a cliqué.
+ */
+export function whatsappUrl(context?: string) {
+  const base = site.contact.whatsappMessage;
+  const text = context ? `${base}\n\nPrestation : ${context}` : base;
+  return `https://wa.me/${digits(site.contact.phoneE164)}?text=${encodeURIComponent(text)}`;
+}
+
+export function telUrl() {
+  return `tel:${site.contact.phoneE164}`;
+}
+
+/**
+ * Adresse sur une ligne. Renvoie "" tant que ni la rue ni la ville ne sont
+ * renseignées — le pays seul n'est pas une adresse affichable, et les blocs
+ * qui l'utilisent se masquent d'eux-mêmes.
+ */
+export function formattedAddress() {
+  const { street, city, country } = site.address;
+  if (!street && !city) return "";
+  return [street, city, country].filter(Boolean).join(", ");
+}
+
+const DAY_INDEX: Record<string, number> = {
+  Dimanche: 0,
+  Lundi: 1,
+  Mardi: 2,
+  Mercredi: 3,
+  Jeudi: 4,
+  Vendredi: 5,
+  Samedi: 6,
+};
+
+/** Renvoie l'entrée d'horaires correspondant au jour passé (par défaut aujourd'hui). */
+export function todayHours(now = new Date()) {
+  return site.hours.find((h) => DAY_INDEX[h.day] === now.getDay());
+}
+
+/** Abréviations schema.org (Mo, Tu…) pour les données structurées. */
+const SCHEMA_DAY: Record<string, string> = {
+  Lundi: "Mo",
+  Mardi: "Tu",
+  Mercredi: "We",
+  Jeudi: "Th",
+  Vendredi: "Fr",
+  Samedi: "Sa",
+  Dimanche: "Su",
+};
+
+export function schemaOpeningHours() {
+  return site.hours
+    .filter((h) => !h.closed && h.open && h.close)
+    .map((h) => `${SCHEMA_DAY[h.day]} ${h.open}-${h.close}`);
+}

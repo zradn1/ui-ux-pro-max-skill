@@ -1,0 +1,22 @@
+# Déploiement Netlify du site Zineb Hair & Beauty.
+#
+# Ce projet vit dans un sous-dossier d'un dépôt qui contient tout autre chose
+# (la boîte à outils ui-ux-pro-max). Côté Netlify, il faut donc régler le
+# « base directory » du site sur :
+#
+#     projects/zineb-hair-beauty
+#
+# Les chemins ci-dessous sont relatifs à ce dossier une fois le base directory
+# posé. Sans ce réglage, Netlify construirait la racine du dépôt, c'est-à-dire
+# le mauvais projet.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+# Le runtime Next.js de Netlify : rendu des routes, next/image, en-têtes.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "22"

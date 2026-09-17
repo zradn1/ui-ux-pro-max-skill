@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { site } from "@/content/site";
 import { formattedAddress, telUrl, whatsappUrl } from "@/lib/booking";
-import { ClockIcon, MapPinIcon, PhoneIcon, WhatsAppIcon, InstagramIcon } from "./Icons";
+import { ClockIcon, MapPinIcon, PhoneIcon, WhatsAppIcon } from "./Icons";
+import SocialLinks from "./SocialLinks";
 import Reveal from "./Reveal";
 
 export default function Visit() {
@@ -111,15 +112,12 @@ export default function Visit() {
               {/* `mt-auto` colle ce bloc en bas : la carte reste équilibrée avec
                   celle des horaires, même quand l'adresse n'est pas renseignée. */}
               <div className="mt-auto flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-6 text-sm">
-                <a
-                  href={site.contact.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex min-h-11 items-center gap-2 text-muted transition-colors hover:text-rose"
-                >
-                  <InstagramIcon className="h-4 w-4" />
-                  {site.contact.instagramHandle}
-                </a>
+                {/* `contents` : les <li> rejoignent la rangée flex du parent,
+                    sans imbriquer une seconde liste dans la mise en page. */}
+                <SocialLinks
+                  className="contents"
+                  itemClassName="inline-flex min-h-11 items-center gap-2 text-muted transition-colors hover:text-rose"
+                />
                 {site.contact.email && (
                   <a
                     href={`mailto:${site.contact.email}`}

@@ -59,3 +59,11 @@ export function schemaOpeningHours() {
     .filter((h) => !h.closed && h.open && h.close)
     .map((h) => `${SCHEMA_DAY[h.day]} ${h.open}-${h.close}`);
 }
+
+/**
+ * Réseaux sociaux réellement renseignés, dans l'ordre de `content/site.ts`.
+ * Une entrée sans URL est ignorée : le site n'affiche jamais de lien mort.
+ */
+export function activeSocials() {
+  return site.socials.filter((s) => s.url);
+}

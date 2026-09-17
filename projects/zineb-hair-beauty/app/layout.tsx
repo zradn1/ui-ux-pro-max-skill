@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { site } from "@/content/site";
-import { formattedAddress, schemaOpeningHours } from "@/lib/booking";
+import { activeSocials, formattedAddress, schemaOpeningHours } from "@/lib/booking";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -81,7 +81,7 @@ function schema() {
         }
       : {}),
     openingHours: schemaOpeningHours(),
-    sameAs: [site.contact.instagram].filter(Boolean),
+    sameAs: activeSocials().map((s) => s.url),
     ...(site.address.mapsUrl ? { hasMap: site.address.mapsUrl } : {}),
   };
 }

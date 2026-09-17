@@ -31,7 +31,10 @@ replaced, the site runs fine but shows stand-in values:
 | Opening hours | `hours` | Mon–Sat 09:00–19:00, Sun closed — **confirm with the salon** |
 | Prices | `price` on any service | omitted → price column hidden |
 | Photos | `gallery[].src` | empty → gradient placeholders |
+| Logo file | `logo.src` | empty → **typographic fallback** |
 | Reviews | `testimonials` | empty → **whole section hidden** |
+| TikTok account | `socials` → `platform: "tiktok"` | empty → **hidden everywhere** |
+| TikTok videos | `tiktokVideos` | empty → **video block hidden** |
 | Final domain | `url` | `https://example.com` |
 
 Two things worth stressing:
@@ -41,9 +44,115 @@ Two things worth stressing:
 - **Only add real reviews** to `testimonials`, with the person's permission. The section
   stays hidden while the array is empty, so there's no pressure to invent any.
 
+### Social accounts
+
+`socials` in `content/site.ts` drives every social link on the site — hero, gallery
+header, contact card, footer, and the `sameAs` field in the search-engine markup. Set
+the URL once and all five update together:
+
+```ts
+const socials: Social[] = [
+  { platform: "instagram", url: "https://www.instagram.com/zineb_hair_beauty/", handle: "@zineb_hair_beauty" },
+  { platform: "tiktok",    url: "https://www.tiktok.com/@…",                    handle: "@…" },
+];
+```
+
+The Instagram account is the client's, confirmed. **The TikTok entry is blank** —
+fill in the real profile URL and handle. An entry with an empty `url` is filtered out
+everywhere, so the site never shows a dead link; there's no need to delete the row
+while the account is still being set up.
+
+The array order is the display order. To add Facebook or Pinterest later: add the
+platform to the `Social` type, add its icon to `components/Icons.tsx`, register it in
+the two maps at the top of `components/SocialLinks.tsx`, then add a row here.
+
+### TikTok videos in the gallery
+
+`tiktokVideos` in `content/site.ts` adds an "En vidéo" block under the photo grid.
+Paste the link from TikTok's **Share → Copy link**:
+
+```ts
+const tiktokVideos: TikTokVideo[] = [
+  { url: "https://www.tiktok.com/@zineb_hair_beauty/video/7412345678901234567",
+    caption: "Balayage caramel, avant / après" },
+];
+```
+
+A bare numeric ID works too. **Short `vm.tiktok.com/…` links do not** — they carry no
+video ID, so they're silently skipped; use the long URL with `/video/<id>` in it.
+Anything unparseable is dropped rather than rendering a broken player. Empty array →
+the whole block disappears. Two or three videos is plenty before the page gets long.
+
+**These load on click, not on page load.** The card shows a local placeholder, and the
+TikTok iframe is only inserted when the visitor presses play. I verified this: zero
+network requests to tiktok.com until the click, then exactly one.
+
+This deliberately avoids TikTok's official `embed.js`. That script runs on every page
+load, weighs in at hundreds of KB, and sets third-party cookies before the visitor has
+asked for anything — on a site that is otherwise fully static, it would be the single
+heaviest thing on the page. Each card also carries an "Ouvrir sur TikTok" link, so the
+video is still reachable if a tracker blocker stops the iframe.
+
+One caveat I could not test: **this sandbox has no network access to tiktok.com**, so I
+verified the placeholder, the click behaviour and the generated iframe URL, but never
+saw a real video play. Check one on a real machine before showing the client. If the
+player looks cropped, adjust `aspect-9/16` in `components/TikTokEmbed.tsx` — TikTok's
+own recommended box is 325×575.
+
+Each link's accessible name is the platform plus the handle ("Instagram :
+@zineb_hair_beauty"), because both accounts may share the same handle — on screen the
+icon distinguishes them, but read aloud they would otherwise be identical.
+
 The service list, descriptions and durations are written as a sensible starting point
 for a salon of this type. Read them with the client and adjust — they're normal copy,
 not facts I verified about this business.
+
+### Adding the logo
+
+There are **two slots**, because the two lockups suit different places:
+
+```ts
+logo: {
+  src: "/logo-horizontal.svg",       // ~3:1 lockup  → header
+  width: 2000, height: 654,          // the file's real pixel size
+  stackedSrc: "/logo-square.svg",    // ~1:1 lockup  → footer
+  stackedWidth: 1250, stackedHeight: 1250,
+  whiteBackground: false,
+},
+```
+
+Use the **horizontal** lockup in the header: the bar is 80px tall, and a square logo
+scaled to fit would be about 40px wide with unreadable text. Use the **square** one in
+the footer, where there's vertical room and the full mark has more presence (it renders
+at 112px). Leave `stackedSrc` empty to use the horizontal file everywhere.
+
+The square lockup already contains the "Révélez votre beauté" line, so the footer only
+prints `site.baseline` as text when no square file is set — otherwise it would say it
+twice.
+
+`width`/`height` must match the file's real dimensions — they reserve the space
+while it loads so the header doesn't jump. Until `src` is set, the header and footer
+fall back to a typographic "Zineb. HAIR & BEAUTY" set in the site's own fonts, so
+nothing looks broken in the meantime.
+
+**Supply the logo with a transparent background — SVG for preference.** The page sits
+on cream (`#FBF6F2`), so a file with a baked-in white background shows as a white
+rectangle. If all you have is a flattened PNG or JPEG, set `whiteBackground: true`:
+the logo is then placed on a deliberate white rounded chip, which reads as a design
+choice instead of an accident. That's a stopgap, not the fix.
+
+I first tried `mix-blend-mode: multiply` for this, which normally drops white out.
+It does not work here: the header is `position: fixed` with a `z-index`, so it forms
+its own stacking context and the image has nothing behind it to blend against — the
+white stayed visible. Hence the chip.
+
+Still to do once the real file is in place:
+- **Favicon** — `app/icon.svg` is a stand-in "Z". Replace it with the logo's monogram
+  (the Z-and-profile mark alone, not the full horizontal lockup, which is illegible at
+  32px).
+- **Share image** — add `app/opengraph-image.png` (1200×630) so links shared on
+  WhatsApp and Instagram show the brand rather than a blank card. This matters here:
+  the site's whole booking flow runs through WhatsApp.
 
 ### Adding photos
 
@@ -134,6 +243,10 @@ These are deliberate; please keep them if you edit the components.
 - `prefers-reduced-motion: reduce` disables the reveals and smooth scrolling.
 - The sticky mobile booking bar sets `tabindex="-1"` while off-screen so it isn't a
   keyboard trap, and respects `env(safe-area-inset-bottom)` on notched phones.
+- Social links are named by platform, not just handle, so two accounts sharing a
+  handle don't read identically.
+- TikTok play buttons are named "Lire la vidéo TikTok : <caption>", and each iframe
+  gets a matching `title`, so neither is an unlabelled control.
 - `LocalBusiness`/`HairSalon` JSON-LD is generated in `app/layout.tsx` from
   `content/site.ts` — hours, phone and Instagram flow straight from the content file
   into Google's rich results. It gets more useful once the address is filled in.
@@ -149,9 +262,11 @@ app/
   globals.css     design tokens + reveal animation
   icon.svg        favicon
   sitemap.ts / robots.ts
-components/       one file per section, plus Photo / Reveal / Icons
+components/       one file per section, plus Logo / Photo / Reveal / Icons /
+                  SocialLinks / TikTokEmbed
 content/site.ts   ← all editable content
 lib/booking.ts    WhatsApp + tel link builders, hours helpers
+lib/tiktok.ts     TikTok URL → video ID, embed URL
 ```
 
 To reorder sections, edit `app/page.tsx`. To remove one, delete its line there.

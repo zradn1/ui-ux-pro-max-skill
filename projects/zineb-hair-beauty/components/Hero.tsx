@@ -1,6 +1,7 @@
 import { site } from "@/content/site";
 import { whatsappUrl } from "@/lib/booking";
-import { WhatsAppIcon, ArrowIcon, InstagramIcon } from "./Icons";
+import { WhatsAppIcon, ArrowIcon } from "./Icons";
+import SocialLinks from "./SocialLinks";
 import Photo from "./Photo";
 import Reveal from "./Reveal";
 
@@ -59,15 +60,10 @@ export default function Hero() {
           </Reveal>
 
           <Reveal delay={320}>
-            <a
-              href={site.contact.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 inline-flex min-h-11 items-center gap-2 text-sm text-muted transition-colors hover:text-rose"
-            >
-              <InstagramIcon className="h-4 w-4" />
-              {site.contact.instagramHandle}
-            </a>
+            <SocialLinks
+              className="mt-8 flex flex-wrap items-center gap-x-6"
+              itemClassName="inline-flex min-h-11 items-center gap-2 text-sm text-muted transition-colors hover:text-rose"
+            />
           </Reveal>
         </div>
 

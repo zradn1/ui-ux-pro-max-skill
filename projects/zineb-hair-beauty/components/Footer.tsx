@@ -1,6 +1,7 @@
 import { site } from "@/content/site";
 import { formattedAddress, telUrl } from "@/lib/booking";
-import { InstagramIcon } from "./Icons";
+import Logo from "./Logo";
+import SocialLinks from "./SocialLinks";
 
 export default function Footer() {
   const address = formattedAddress();
@@ -11,13 +12,19 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8">
         <div className="flex flex-col gap-10 sm:flex-row sm:justify-between">
           <div className="max-w-sm">
-            <p className="font-display text-xl text-ink">
-              {site.shortName}
-              <span className="text-rose">.</span>
-              <span className="ml-2 text-xs font-sans font-medium uppercase tracking-[0.2em] text-muted">
-                Hair &amp; Beauty
-              </span>
-            </p>
+            {/* Version carrée : le pied de page a la hauteur pour l'accueillir. */}
+            <Logo variant="stacked" className="h-24 w-auto sm:h-28" />
+            {/*
+              La version carrée du logo porte déjà la signature « Révélez votre
+              beauté ». On ne la répète en texte que lorsqu'elle n'est pas
+              affichée : sans fichier carré, le pied de page retombe sur le
+              lockup horizontal ou sur le repli typographique, qui ne la portent pas.
+            */}
+            {site.baseline && !site.logo.stackedSrc && (
+              <p className="mt-4 font-display text-base italic text-rose">
+                {site.baseline}
+              </p>
+            )}
             <p className="mt-4 text-sm leading-relaxed text-muted">
               {site.footer.note}
             </p>
@@ -36,15 +43,10 @@ export default function Footer() {
                 {site.contact.phoneDisplay}
               </a>
             </p>
-            <a
-              href={site.contact.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center gap-2 transition-colors hover:text-rose"
-            >
-              <InstagramIcon className="h-4 w-4" />
-              {site.contact.instagramHandle}
-            </a>
+            <SocialLinks
+              className="flex flex-col"
+              itemClassName="inline-flex min-h-11 items-center gap-2 transition-colors hover:text-rose"
+            />
           </div>
         </div>
 

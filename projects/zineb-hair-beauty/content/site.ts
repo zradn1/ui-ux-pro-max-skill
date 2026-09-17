@@ -31,6 +31,62 @@ export type Testimonial = {
   author: string;
 };
 
+/** Vidéo TikTok intégrée à la galerie. */
+export type TikTokVideo = {
+  /**
+   * URL longue de la vidéo (celle qui contient « /video/<id> »), ou l'ID seul.
+   * Les liens courts vm.tiktok.com ne conviennent pas : ils ne portent pas l'ID.
+   */
+  url: string;
+  /** Légende courte : titre de l'iframe, nom du bouton lecture, texte affiché. */
+  caption: string;
+};
+
+/** Réseau social affiché sur le site. `url` vide = entrée ignorée partout. */
+export type Social = {
+  platform: "instagram" | "tiktok";
+  url: string;
+  /** Affiché à l'écran, ex. « @zineb_hair_beauty ». */
+  handle: string;
+};
+
+/* ── Réseaux sociaux ─────────────────────────────────────────────────────────
+   L'ordre ici est l'ordre d'affichage sur tout le site.
+   Une entrée dont `url` est vide est automatiquement masquée — pas besoin de
+   la supprimer tant que le compte n'existe pas.
+   Pour ajouter un réseau (Facebook, Pinterest…), ajoutez son icône dans
+   components/Icons.tsx puis référencez-la dans components/SocialLinks.tsx.
+   ─────────────────────────────────────────────────────────────────────────── */
+const socials: Social[] = [
+  {
+    platform: "instagram",
+    url: "https://www.instagram.com/zineb_hair_beauty/",
+    handle: "@zineb_hair_beauty",
+  },
+  {
+    // À COMPLÉTER — URL complète du profil TikTok et pseudo affiché.
+    // Tant que `url` est vide, TikTok n'apparaît nulle part sur le site.
+    platform: "tiktok",
+    url: "",
+    handle: "",
+  },
+];
+
+/* ── Vidéos TikTok ───────────────────────────────────────────────────────────
+   À COMPLÉTER — collez ici l'URL de chaque vidéo à mettre en avant, depuis le
+   bouton « Partager » > « Copier le lien » sur TikTok.
+
+   Tant que ce tableau est vide, le bloc vidéo n'apparaît pas dans la galerie.
+   Rien n'est chargé depuis TikTok avant qu'une visiteuse clique sur Lecture.
+
+   Exemple :
+     { url: "https://www.tiktok.com/@zineb_hair_beauty/video/1234567890123456789",
+       caption: "Balayage caramel, avant / après" },
+
+   Trois vidéos suffisent : au-delà, la page s'allonge sans rien apporter.
+   ─────────────────────────────────────────────────────────────────────────── */
+const tiktokVideos: TikTokVideo[] = [];
+
 /* ── Prestations ─────────────────────────────────────────────────────────────
    Adaptez librement : ajoutez, renommez ou supprimez groupes et lignes.
    ─────────────────────────────────────────────────────────────────────────── */
@@ -147,9 +203,53 @@ export const site = {
   name: "Zineb Hair & Beauty",
   shortName: "Zineb",
   tagline: "Salon de coiffure & institut de beauté",
+  /** Signature de marque, reprise du logo. Vide = masquée. */
+  baseline: "Révélez votre beauté",
   /** Utilisé dans les balises SEO et le partage sur les réseaux. */
   description:
     "Salon de coiffure et institut de beauté. Coupe, couleur, soins, coiffure de mariée, manucure et esthétique — sur rendez-vous.",
+
+  /* ── Logo ───────────────────────────────────────────────────────────────── */
+  /**
+   * À COMPLÉTER — déposez le fichier du logo dans /public puis indiquez son
+   * chemin ci-dessous. Tant que `src` est vide, le site affiche un repli
+   * typographique (« Zineb. HAIR & BEAUTY ») : rien n'est cassé en attendant.
+   *
+   * Format conseillé : SVG. Il reste net sur tous les écrans et pèse quelques
+   * kilo-octets. À défaut, un PNG à fond transparent d'au moins 1200 px de large.
+   */
+  logo: {
+    /**
+     * Version HORIZONTALE (lockup large, ~3:1) — utilisée dans l'en-tête.
+     * C'est la seule qui fonctionne dans une barre de 80 px de haut : une
+     * version carrée y ferait 40 px de large et serait illisible.
+     */
+    src: "",
+    /** Dimensions réelles du fichier, en pixels. Elles réservent la place
+     *  pendant le chargement et évitent que la page « saute ». */
+    width: 2000,
+    height: 654,
+    /**
+     * Version CARRÉE / EMPILÉE (~1:1) — utilisée dans le pied de page, où la
+     * hauteur ne manque pas et où le logo complet a plus de présence.
+     * Laisser vide pour réutiliser la version horizontale partout.
+     */
+    stackedSrc: "",
+    stackedWidth: 1250,
+    stackedHeight: 1250,
+    /**
+     * Le fichier DOIT idéalement avoir un fond transparent : c'est la seule
+     * façon que le logo se pose proprement sur le crème du site.
+     *
+     * Si vous n'avez qu'un fichier à fond blanc (JPEG, PNG aplati), mettez
+     * `true` : le logo est alors présenté sur une pastille blanche arrondie,
+     * ce qui se lit comme un choix graphique plutôt que comme un rectangle
+     * blanc oublié. C'est un dépannage, pas la bonne réponse — demandez le
+     * logo en SVG ou en PNG transparent dès que possible, puis repassez à
+     * `false`.
+     */
+    whiteBackground: false,
+  },
 
   /* ── Coordonnées ────────────────────────────────────────────────────────── */
   contact: {
@@ -159,8 +259,6 @@ export const site = {
     phoneDisplay: "+212 6 00 00 00 00",
     // À COMPLÉTER — laisser vide ("") pour masquer le bouton e-mail
     email: "",
-    instagram: "https://www.instagram.com/zineb_hair_beauty/",
-    instagramHandle: "@zineb_hair_beauty",
     /** Message pré-rempli à l'ouverture de WhatsApp. */
     whatsappMessage:
       "Bonjour Zineb Hair & Beauty 👋 Je souhaite prendre rendez-vous.",
@@ -214,6 +312,12 @@ export const site = {
       { value: "", label: "Clientes accompagnées" },
     ],
   },
+
+  /* ── Réseaux sociaux (voir le tableau `socials` plus haut) ─────────────── */
+  socials,
+
+  /* ── Vidéos TikTok (voir le tableau `tiktokVideos` plus haut) ──────────── */
+  tiktokVideos,
 
   /* ── Prestations (voir le tableau `services` plus haut) ──────────────── */
   services,

@@ -253,10 +253,19 @@ export const site = {
 
   /* ── Coordonnées ────────────────────────────────────────────────────────── */
   contact: {
-    // À COMPLÉTER — format international, sans espaces, pour les liens tel:/WhatsApp
-    phoneE164: "+212600000000",
-    // À COMPLÉTER — version affichée à l'écran
-    phoneDisplay: "+212 6 00 00 00 00",
+    /**
+     * Format international, sans espaces : utilisé par les liens tel: et par
+     * WhatsApp, qui n'accepte que cette forme.
+     *
+     * ⚠️ Le numéro communiqué est « 0783 785 925 », au format national. Il a
+     * été converti en indicatif marocain (+212) pour rester cohérent avec le
+     * reste de la fiche (pays « Maroc », addressCountry « MA »). Si le salon
+     * est en France, remplacer par « +33783785925 » — c'est la seule ligne à
+     * changer, tous les liens en découlent.
+     */
+    phoneE164: "+212783785925",
+    /** Version affichée à l'écran, telle que communiquée par le salon. */
+    phoneDisplay: "0783 785 925",
     // À COMPLÉTER — laisser vide ("") pour masquer le bouton e-mail
     email: "",
     /** Message pré-rempli à l'ouverture de WhatsApp. */
@@ -276,15 +285,28 @@ export const site = {
   },
 
   /* ── Horaires ───────────────────────────────────────────────────────────── */
-  /** À COMPLÉTER — mettez `closed: true` pour les jours de fermeture. */
+  /**
+   * Horaires confirmés par le salon : mardi à dimanche, 12h00 – 22h00 ;
+   * fermé le lundi.
+   *
+   * La semaine commence ici un MARDI, et non un lundi. Ce n'est pas un
+   * oubli : l'affichage regroupe les jours consécutifs de mêmes horaires
+   * (voir `groupedHours()` dans lib/booking.ts), et cet ordre produit
+   * « Mardi → Dimanche » puis « Lundi », comme demandé. Un ordre lundi →
+   * dimanche couperait la plage en deux.
+   *
+   * Les heures restent au format 24 h « HH:MM » : c'est ce qu'attendent les
+   * données structurées lues par Google. La forme française « 12h00 » est
+   * produite à l'affichage.
+   */
   hours: [
-    { day: "Lundi", open: "09:00", close: "19:00", closed: false },
-    { day: "Mardi", open: "09:00", close: "19:00", closed: false },
-    { day: "Mercredi", open: "09:00", close: "19:00", closed: false },
-    { day: "Jeudi", open: "09:00", close: "19:00", closed: false },
-    { day: "Vendredi", open: "09:00", close: "19:00", closed: false },
-    { day: "Samedi", open: "09:00", close: "20:00", closed: false },
-    { day: "Dimanche", open: "", close: "", closed: true },
+    { day: "Mardi", open: "12:00", close: "22:00", closed: false },
+    { day: "Mercredi", open: "12:00", close: "22:00", closed: false },
+    { day: "Jeudi", open: "12:00", close: "22:00", closed: false },
+    { day: "Vendredi", open: "12:00", close: "22:00", closed: false },
+    { day: "Samedi", open: "12:00", close: "22:00", closed: false },
+    { day: "Dimanche", open: "12:00", close: "22:00", closed: false },
+    { day: "Lundi", open: "", close: "", closed: true },
   ],
 
   /* ── Section héro ───────────────────────────────────────────────────────── */

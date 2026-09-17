@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { site } from "@/content/site";
-import { formattedAddress, telUrl, whatsappUrl } from "@/lib/booking";
+import { formattedAddress, groupedHours, telUrl, whatsappUrl } from "@/lib/booking";
 import { ClockIcon, MapPinIcon, PhoneIcon, WhatsAppIcon } from "./Icons";
 import SocialLinks from "./SocialLinks";
 import Reveal from "./Reveal";
@@ -46,27 +46,31 @@ export default function Visit() {
                 <ClockIcon className="h-5 w-5 text-rose" />
                 Horaires d&apos;ouverture
               </h3>
+              {/*
+                Les jours consécutifs de mêmes horaires sont regroupés
+                (« Mardi → Dimanche »). Le découpage est calculé à partir de
+                `hours` dans content/site.ts : rien à retoucher ici si les
+                horaires changent.
+              */}
               <dl className="mt-6 divide-y divide-line/70">
-                {site.hours.map((h) => {
-                  const isToday = today === h.day;
+                {groupedHours().map((group) => {
+                  const isToday = today !== null && group.days.includes(today);
                   return (
                     <div
-                      key={h.day}
+                      key={group.label}
                       className={`flex items-center justify-between gap-4 py-3 text-sm ${
                         isToday ? "font-medium text-ink" : "text-muted"
                       }`}
                     >
                       <dt className="flex items-center gap-2">
-                        {h.day}
+                        {group.label}
                         {isToday && (
                           <span className="rounded-full bg-blush px-2 py-0.5 text-[0.65rem] uppercase tracking-wider text-rose">
                             Aujourd&apos;hui
                           </span>
                         )}
                       </dt>
-                      <dd className={h.closed ? "text-muted" : ""}>
-                        {h.closed ? "Fermé" : `${h.open} – ${h.close}`}
-                      </dd>
+                      <dd>{group.value}</dd>
                     </div>
                   );
                 })}

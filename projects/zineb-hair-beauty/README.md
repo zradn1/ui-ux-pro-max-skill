@@ -24,11 +24,11 @@ replaced, the site runs fine but shows stand-in values:
 
 | What | Where in `content/site.ts` | Currently |
 |---|---|---|
-| Phone number | `contact.phoneE164` / `contact.phoneDisplay` | `+212600000000` — placeholder |
+| Phone number | `contact.phoneE164` / `contact.phoneDisplay` | ✅ `0783 785 925` — confirmed |
 | Email (optional) | `contact.email` | empty → button hidden |
 | Street & city | `address.street`, `address.city` | empty → address block hidden |
 | Google Maps link | `address.mapsUrl` | empty → "Itinéraire" link hidden |
-| Opening hours | `hours` | Mon–Sat 09:00–19:00, Sun closed — **confirm with the salon** |
+| Opening hours | `hours` | ✅ Tue–Sun 12:00–22:00, Mon closed — confirmed |
 | Prices | `price` on any service | omitted → price column hidden |
 | Photos | `gallery[].src` | empty → gradient placeholders |
 | Logo file | `logo.src` | empty → **typographic fallback** |
@@ -39,8 +39,30 @@ replaced, the site runs fine but shows stand-in values:
 
 Two things worth stressing:
 
-- **`contact.phoneE164` must be the real number** — every WhatsApp button and every
-  `tel:` link is generated from it. This is the single most important value in the file.
+- **`contact.phoneE164` drives every WhatsApp button and every `tel:` link.** The salon
+  gave the number in national form, `0783 785 925`, which does not say which country it
+  belongs to. It is stored as `+212783785925` to match the rest of the record (country
+  "Maroc", `addressCountry: "MA"`). **If the salon is in France, change it to
+  `+33783785925`** — that one line feeds every link on the site.
+
+### Opening hours
+
+`hours` holds one entry per day in 24-hour `HH:MM`, which is what the structured data
+Google reads expects. The French `12h00` form is produced at render time.
+
+Consecutive days sharing the same times are collapsed automatically by `groupedHours()`
+in `lib/booking.ts`, so the card shows two lines rather than seven:
+
+```
+Mardi → Dimanche      12h00 → 22h00
+Lundi                 Fermé
+```
+
+The array starts on **Tuesday**, not Monday. That is deliberate: the grouping walks the
+array in order, and a Monday-first order would split the open run into two pieces
+("Mardi → Dimanche" would become "Mardi → Samedi" plus a stray "Dimanche"). If you
+change the hours so a day differs, the display re-splits on its own — nothing to edit
+in the component.
 - **Only add real reviews** to `testimonials`, with the person's permission. The section
   stays hidden while the array is empty, so there's no pressure to invent any.
 

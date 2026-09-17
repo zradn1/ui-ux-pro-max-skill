@@ -60,6 +60,51 @@ export function schemaOpeningHours() {
     .map((h) => `${SCHEMA_DAY[h.day]} ${h.open}-${h.close}`);
 }
 
+/** « 12:00 » → « 12h00 ». Les données restent en 24 h pour schema.org. */
+function frenchTime(value: string) {
+  return value.replace(":", "h");
+}
+
+export type HoursGroup = {
+  /** « Mardi → Dimanche », ou « Lundi » pour un jour isolé. */
+  label: string;
+  /** « 12h00 → 22h00 », ou « Fermé ». */
+  value: string;
+  /** Jours couverts, pour repérer celui d'aujourd'hui. */
+  days: string[];
+};
+
+/**
+ * Regroupe les jours consécutifs de mêmes horaires.
+ *
+ * Lister sept lignes identiques n'apprend rien : « Mardi → Dimanche,
+ * 12h00 → 22h00 » se lit d'un coup d'œil. Le regroupement est calculé, pas
+ * écrit en dur — si les horaires changent un jour de la semaine, l'affichage
+ * se redécoupe tout seul, et les données structurées restent la seule source.
+ *
+ * L'ordre du tableau `hours` fait foi : il commence un mardi pour que la
+ * plage ouverte sorte en premier.
+ */
+export function groupedHours(): HoursGroup[] {
+  const groups: HoursGroup[] = [];
+
+  for (const entry of site.hours) {
+    const value = entry.closed
+      ? "Fermé"
+      : `${frenchTime(entry.open)} → ${frenchTime(entry.close)}`;
+
+    const last = groups[groups.length - 1];
+    if (last && last.value === value) {
+      last.days.push(entry.day);
+      last.label = `${last.days[0]} → ${entry.day}`;
+    } else {
+      groups.push({ label: entry.day, value, days: [entry.day] });
+    }
+  }
+
+  return groups;
+}
+
 /**
  * Réseaux sociaux réellement renseignés, dans l'ordre de `content/site.ts`.
  * Une entrée sans URL est ignorée : le site n'affiche jamais de lien mort.

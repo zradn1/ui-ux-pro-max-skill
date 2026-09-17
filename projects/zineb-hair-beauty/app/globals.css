@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Jetons de design
+   Palette validée WCAG : tous les couples texte/fond utilisés atteignent au
+   moins 4.5:1 (AA). Voir README pour le détail des ratios.
+   ─────────────────────────────────────────────────────────────────────────── */
+@theme {
+  --color-cream: #fbf6f2;
+  --color-blush: #f3e6e9;
+  --color-ink: #2a1d22;
+  --color-deep: #241a1f;
+  --color-muted: #6b5560;
+  --color-rose: #a63d62;
+  --color-rose-soft: #e4a8bc;
+  --color-gold: #8a6d33;
+  --color-gold-soft: #d4b87e;
+  --color-line: #e7d9dd;
+
+  /* Alimentées par next/font (voir app/layout.tsx). */
+  --font-display: var(--font-playfair), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1.25rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Compense l'en-tête fixe quand on arrive sur une ancre. */
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    /* Évite le rafraîchissement accidentel au scroll sur mobile. */
+    overscroll-behavior-y: contain;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-rose);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /*
+   * Apparition au scroll — pilotée par IntersectionObserver (Reveal.tsx).
+   * Le masquage initial est conditionné à la classe `js`, posée par un script
+   * inline dès le chargement. Si JavaScript est absent ou échoue, le contenu
+   * reste visible : aucune section ne peut « disparaître ».
+   */
+  .reveal {
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+
+  .js .reveal[data-visible="true"] {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .js .reveal {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Filet doré décoratif sous les titres de section. */
+  .rule-gold::after {
+    content: "";
+    display: block;
+    width: 3rem;
+    height: 1px;
+    margin-top: 1.25rem;
+    background: linear-gradient(
+      to right,
+      var(--color-gold),
+      color-mix(in srgb, var(--color-gold) 20%, transparent)
+    );
+  }
+}

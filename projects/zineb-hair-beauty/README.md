@@ -33,6 +33,7 @@ replaced, the site runs fine but shows stand-in values:
 | Photos | `gallery[].src` | empty → gradient placeholders |
 | Reviews | `testimonials` | empty → **whole section hidden** |
 | TikTok account | `socials` → `platform: "tiktok"` | empty → **hidden everywhere** |
+| TikTok videos | `tiktokVideos` | empty → **video block hidden** |
 | Final domain | `url` | `https://example.com` |
 
 Two things worth stressing:
@@ -63,6 +64,39 @@ while the account is still being set up.
 The array order is the display order. To add Facebook or Pinterest later: add the
 platform to the `Social` type, add its icon to `components/Icons.tsx`, register it in
 the two maps at the top of `components/SocialLinks.tsx`, then add a row here.
+
+### TikTok videos in the gallery
+
+`tiktokVideos` in `content/site.ts` adds an "En vidéo" block under the photo grid.
+Paste the link from TikTok's **Share → Copy link**:
+
+```ts
+const tiktokVideos: TikTokVideo[] = [
+  { url: "https://www.tiktok.com/@zineb_hair_beauty/video/7412345678901234567",
+    caption: "Balayage caramel, avant / après" },
+];
+```
+
+A bare numeric ID works too. **Short `vm.tiktok.com/…` links do not** — they carry no
+video ID, so they're silently skipped; use the long URL with `/video/<id>` in it.
+Anything unparseable is dropped rather than rendering a broken player. Empty array →
+the whole block disappears. Two or three videos is plenty before the page gets long.
+
+**These load on click, not on page load.** The card shows a local placeholder, and the
+TikTok iframe is only inserted when the visitor presses play. I verified this: zero
+network requests to tiktok.com until the click, then exactly one.
+
+This deliberately avoids TikTok's official `embed.js`. That script runs on every page
+load, weighs in at hundreds of KB, and sets third-party cookies before the visitor has
+asked for anything — on a site that is otherwise fully static, it would be the single
+heaviest thing on the page. Each card also carries an "Ouvrir sur TikTok" link, so the
+video is still reachable if a tracker blocker stops the iframe.
+
+One caveat I could not test: **this sandbox has no network access to tiktok.com**, so I
+verified the placeholder, the click behaviour and the generated iframe URL, but never
+saw a real video play. Check one on a real machine before showing the client. If the
+player looks cropped, adjust `aspect-9/16` in `components/TikTokEmbed.tsx` — TikTok's
+own recommended box is 325×575.
 
 Each link's accessible name is the platform plus the handle ("Instagram :
 @zineb_hair_beauty"), because both accounts may share the same handle — on screen the
@@ -163,6 +197,8 @@ These are deliberate; please keep them if you edit the components.
   keyboard trap, and respects `env(safe-area-inset-bottom)` on notched phones.
 - Social links are named by platform, not just handle, so two accounts sharing a
   handle don't read identically.
+- TikTok play buttons are named "Lire la vidéo TikTok : <caption>", and each iframe
+  gets a matching `title`, so neither is an unlabelled control.
 - `LocalBusiness`/`HairSalon` JSON-LD is generated in `app/layout.tsx` from
   `content/site.ts` — hours, phone and Instagram flow straight from the content file
   into Google's rich results. It gets more useful once the address is filled in.
@@ -178,9 +214,11 @@ app/
   globals.css     design tokens + reveal animation
   icon.svg        favicon
   sitemap.ts / robots.ts
-components/       one file per section, plus Photo / Reveal / Icons / SocialLinks
+components/       one file per section, plus Photo / Reveal / Icons / SocialLinks /
+                  TikTokEmbed
 content/site.ts   ← all editable content
 lib/booking.ts    WhatsApp + tel link builders, hours helpers
+lib/tiktok.ts     TikTok URL → video ID, embed URL
 ```
 
 To reorder sections, edit `app/page.tsx`. To remove one, delete its line there.

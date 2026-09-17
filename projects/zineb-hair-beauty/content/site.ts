@@ -31,6 +31,17 @@ export type Testimonial = {
   author: string;
 };
 
+/** Vidéo TikTok intégrée à la galerie. */
+export type TikTokVideo = {
+  /**
+   * URL longue de la vidéo (celle qui contient « /video/<id> »), ou l'ID seul.
+   * Les liens courts vm.tiktok.com ne conviennent pas : ils ne portent pas l'ID.
+   */
+  url: string;
+  /** Légende courte : titre de l'iframe, nom du bouton lecture, texte affiché. */
+  caption: string;
+};
+
 /** Réseau social affiché sur le site. `url` vide = entrée ignorée partout. */
 export type Social = {
   platform: "instagram" | "tiktok";
@@ -60,6 +71,21 @@ const socials: Social[] = [
     handle: "",
   },
 ];
+
+/* ── Vidéos TikTok ───────────────────────────────────────────────────────────
+   À COMPLÉTER — collez ici l'URL de chaque vidéo à mettre en avant, depuis le
+   bouton « Partager » > « Copier le lien » sur TikTok.
+
+   Tant que ce tableau est vide, le bloc vidéo n'apparaît pas dans la galerie.
+   Rien n'est chargé depuis TikTok avant qu'une visiteuse clique sur Lecture.
+
+   Exemple :
+     { url: "https://www.tiktok.com/@zineb_hair_beauty/video/1234567890123456789",
+       caption: "Balayage caramel, avant / après" },
+
+   Trois vidéos suffisent : au-delà, la page s'allonge sans rien apporter.
+   ─────────────────────────────────────────────────────────────────────────── */
+const tiktokVideos: TikTokVideo[] = [];
 
 /* ── Prestations ─────────────────────────────────────────────────────────────
    Adaptez librement : ajoutez, renommez ou supprimez groupes et lignes.
@@ -245,6 +271,9 @@ export const site = {
 
   /* ── Réseaux sociaux (voir le tableau `socials` plus haut) ─────────────── */
   socials,
+
+  /* ── Vidéos TikTok (voir le tableau `tiktokVideos` plus haut) ──────────── */
+  tiktokVideos,
 
   /* ── Prestations (voir le tableau `services` plus haut) ──────────────── */
   services,

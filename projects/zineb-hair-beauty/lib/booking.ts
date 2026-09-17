@@ -11,7 +11,7 @@ const digits = (value: string) => value.replace(/\D/g, "");
 export function whatsappUrl(context?: string) {
   const base = site.contact.whatsappMessage;
   const text = context ? `${base}\nPrestation : ${context}` : base;
-  return `https://wa.me/${digits(site.contact.phoneE164)}?text=${encodeURIComponent(text)}`;
+  return `https://wa.me/${digits(site.contact.whatsappE164)}?text=${encodeURIComponent(text)}`;
 }
 
 export function telUrl() {

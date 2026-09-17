@@ -252,16 +252,23 @@ export const site = {
   /* ── Coordonnées ────────────────────────────────────────────────────────── */
   contact: {
     /**
-     * Format international, sans espaces : utilisé par les liens tel: et par
-     * WhatsApp, qui n'accepte que cette forme.
-     *
-     * « 0783 785 925 » est un mobile français (préfixe 07), d'où l'indicatif
-     * +33 et la suppression du 0 initial. C'est l'unique endroit où le numéro
-     * existe : tous les liens tel: et WhatsApp du site en découlent.
+     * Ligne téléphonique, au format international sans espaces.
+     * Alimente tous les liens tel: du site (bouton d'appel, pied de page,
+     * barre mobile) ainsi que les données structurées lues par Google.
      */
     phoneE164: "+33783785925",
     /** Version affichée à l'écran, telle que communiquée par le salon. */
     phoneDisplay: "0783 785 925",
+    /**
+     * Numéro WhatsApp, volontairement distinct de `phoneE164`.
+     *
+     * Le salon a confirmé « 212783785925 » pour WhatsApp, soit l'indicatif
+     * marocain, alors que la ligne affichée est au format français. Les deux
+     * ne sont donc pas le même champ et ne doivent pas être fusionnés.
+     *
+     * WhatsApp n'accepte que le format international.
+     */
+    whatsappE164: "+212783785925",
     // À COMPLÉTER — laisser vide ("") pour masquer le bouton e-mail
     email: "",
     /** Message pré-rempli à l'ouverture de WhatsApp. */

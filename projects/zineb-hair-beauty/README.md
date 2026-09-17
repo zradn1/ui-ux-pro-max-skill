@@ -24,7 +24,8 @@ replaced, the site runs fine but shows stand-in values:
 
 | What | Where in `content/site.ts` | Currently |
 |---|---|---|
-| Phone number | `contact.phoneE164` / `contact.phoneDisplay` | ✅ `0783 785 925` — confirmed |
+| Phone line | `contact.phoneE164` / `contact.phoneDisplay` | ✅ `0783 785 925` → `+33783785925` |
+| WhatsApp number | `contact.whatsappE164` | ✅ `+212783785925` — separate field |
 | Email (optional) | `contact.email` | empty → button hidden |
 | Street & city | `address.street`, `address.city` | empty → address block hidden |
 | Google Maps link | `address.mapsUrl` | empty → "Itinéraire" link hidden |
@@ -39,9 +40,18 @@ replaced, the site runs fine but shows stand-in values:
 
 Two things worth stressing:
 
-- **`contact.phoneE164` drives every WhatsApp button and every `tel:` link.** The salon
-  is in France, so `0783 785 925` (a `07` mobile) is stored as `+33783785925`. That one
-  line feeds every link on the site; the on-screen text stays in national form.
+- **The phone line and WhatsApp are two separate fields, on two different country
+  codes.** `contact.phoneE164` is `+33783785925` and feeds the four `tel:` links, the
+  number shown on screen, and the structured data. `contact.whatsappE164` is
+  `+212783785925` (Morocco) and feeds all eighteen WhatsApp links. The salon confirmed
+  this split explicitly.
+
+  Worth re-checking on a real phone: the two numbers share the same nine digits
+  (`783785925`) and differ only in country code. If the salon's line is in fact the
+  Moroccan one, then tapping the displayed `0783 785 925` from France would dial an
+  unrelated French subscriber. If that turns out to be the case, set `phoneE164` to
+  `+212783785925` and `phoneDisplay` to `+212 783 785 925` — two lines, and every
+  `tel:` link follows.
 
 ### Opening hours
 

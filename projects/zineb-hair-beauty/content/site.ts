@@ -257,13 +257,11 @@ export const site = {
      * Format international, sans espaces : utilisé par les liens tel: et par
      * WhatsApp, qui n'accepte que cette forme.
      *
-     * ⚠️ Le numéro communiqué est « 0783 785 925 », au format national. Il a
-     * été converti en indicatif marocain (+212) pour rester cohérent avec le
-     * reste de la fiche (pays « Maroc », addressCountry « MA »). Si le salon
-     * est en France, remplacer par « +33783785925 » — c'est la seule ligne à
-     * changer, tous les liens en découlent.
+     * « 0783 785 925 » est un mobile français (préfixe 07), d'où l'indicatif
+     * +33 et la suppression du 0 initial. C'est l'unique endroit où le numéro
+     * existe : tous les liens tel: et WhatsApp du site en découlent.
      */
-    phoneE164: "+212783785925",
+    phoneE164: "+33783785925",
     /** Version affichée à l'écran, telle que communiquée par le salon. */
     phoneDisplay: "0783 785 925",
     // À COMPLÉTER — laisser vide ("") pour masquer le bouton e-mail
@@ -279,7 +277,9 @@ export const site = {
     street: "",
     // À COMPLÉTER
     city: "",
-    country: "Maroc",
+    country: "France",
+    /** Code ISO 3166-1 alpha-2, utilisé par les données structurées. */
+    countryCode: "FR",
     /** À COMPLÉTER — lien « Partager » depuis Google Maps. Vide = carte masquée. */
     mapsUrl: "",
   },

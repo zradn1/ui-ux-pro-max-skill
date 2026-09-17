@@ -40,10 +40,8 @@ replaced, the site runs fine but shows stand-in values:
 Two things worth stressing:
 
 - **`contact.phoneE164` drives every WhatsApp button and every `tel:` link.** The salon
-  gave the number in national form, `0783 785 925`, which does not say which country it
-  belongs to. It is stored as `+212783785925` to match the rest of the record (country
-  "Maroc", `addressCountry: "MA"`). **If the salon is in France, change it to
-  `+33783785925`** — that one line feeds every link on the site.
+  is in France, so `0783 785 925` (a `07` mobile) is stored as `+33783785925`. That one
+  line feeds every link on the site; the on-screen text stays in national form.
 
 ### Opening hours
 

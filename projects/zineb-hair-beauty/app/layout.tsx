@@ -76,7 +76,7 @@ function schema() {
             "@type": "PostalAddress",
             ...(site.address.street ? { streetAddress: site.address.street } : {}),
             ...(site.address.city ? { addressLocality: site.address.city } : {}),
-            addressCountry: "MA",
+            addressCountry: site.address.countryCode,
           },
         }
       : {}),

@@ -1,5 +1,12 @@
+<!--
+  Favicon d'onglet. Volontairement simplifié : le monogramme dessiné du logo
+  (chevelure + profil) devient illisible à 16 px, la taille réelle d'un favicon.
+  On garde donc sa géométrie et ses couleurs — brun espresso et crème, relevés
+  sur le logo — dans une forme qui tient à cette taille. Le vrai monogramme
+  sert à app/apple-icon.png, rendu à 180 px, où le détail survit.
+-->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#a63d62"/>
-  <text x="32" y="45" font-family="Georgia, serif" font-size="38" font-style="italic"
-        text-anchor="middle" fill="#fbf6f2">Z</text>
+  <rect width="64" height="64" rx="14" fill="#3d2317"/>
+  <path d="M16 16 H48 V25 L29 39 H48 V48 H16 V39 L35 25 H16 Z" fill="#fbf6f2"/>
+  <circle cx="52" cy="46" r="3.4" fill="#a86a7e"/>
 </svg>

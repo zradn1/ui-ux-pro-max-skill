@@ -48,8 +48,14 @@ export default function Header() {
     >
       <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-5 sm:px-8">
         <a href="#" aria-label={`${site.name} — accueil`} className="flex items-center">
-          {/* `priority` : le logo est au-dessus de la ligne de flottaison. */}
-          <Logo priority className="h-8 w-auto sm:h-10" />
+          {/*
+            `priority` : le logo est au-dessus de la ligne de flottaison.
+
+            Hauteur généreuse (56 px dans une barre de 80 px) : ce lockup
+            empile trois lignes de texte — « Zineb. », « HAIR & BEAUTY » et la
+            signature. À 40 px, chacune tombait sous 8 px et devenait illisible.
+          */}
+          <Logo priority className="h-11 w-auto sm:h-14" />
         </a>
 
         <nav aria-label="Navigation principale" className="hidden items-center gap-8 lg:flex">

@@ -13,7 +13,7 @@ export default function Footer() {
         <div className="flex flex-col gap-10 sm:flex-row sm:justify-between">
           <div className="max-w-sm">
             {/* Version carrée : le pied de page a la hauteur pour l'accueillir. */}
-            <Logo variant="stacked" className="h-24 w-auto sm:h-28" />
+            <Logo variant="stacked" className="h-28 w-auto sm:h-32" />
             {/*
               La version carrée du logo porte déjà la signature « Révélez votre
               beauté ». On ne la répète en texte que lorsqu'elle n'est pas

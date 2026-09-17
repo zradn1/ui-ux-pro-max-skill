@@ -31,7 +31,7 @@ replaced, the site runs fine but shows stand-in values:
 | Opening hours | `hours` | ✅ Tue–Sun 12:00–22:00, Mon closed — confirmed |
 | Prices | `price` on any service | omitted → price column hidden |
 | Photos | `gallery[].src` | empty → gradient placeholders |
-| Logo file | `logo.src` | empty → **typographic fallback** |
+| Logo files | `logo.src` / `logo.stackedSrc` | ✅ both lockups in place |
 | Reviews | `testimonials` | empty → **whole section hidden** |
 | TikTok account | `socials` → `platform: "tiktok"` | empty → **hidden everywhere** |
 | TikTok videos | `tiktokVideos` | empty → **video block hidden** |
@@ -127,52 +127,47 @@ The service list, descriptions and durations are written as a sensible starting 
 for a salon of this type. Read them with the client and adjust — they're normal copy,
 not facts I verified about this business.
 
-### Adding the logo
+### The logo
 
-There are **two slots**, because the two lockups suit different places:
+Both lockups the salon supplied are in `public/`, already wired up:
 
-```ts
-logo: {
-  src: "/logo-horizontal.svg",       // ~3:1 lockup  → header
-  width: 2000, height: 654,          // the file's real pixel size
-  stackedSrc: "/logo-square.svg",    // ~1:1 lockup  → footer
-  stackedWidth: 1250, stackedHeight: 1250,
-  whiteBackground: false,
-},
-```
+| Slot | File | Used in | Rendered at |
+|---|---|---|---|
+| `src` | `logo-horizontal.webp` (1000×475) | header | 118×56 desktop, 93×44 mobile |
+| `stackedSrc` | `logo-square.webp` (700×698) | footer | 128px tall |
 
-Use the **horizontal** lockup in the header: the bar is 80px tall, and a square logo
-scaled to fit would be about 40px wide with unreadable text. Use the **square** one in
-the footer, where there's vertical room and the full mark has more presence (it renders
-at 112px). Leave `stackedSrc` empty to use the horizontal file everywhere.
+**What was done to the originals.** They arrived as transparent PNGs, 2172×724 and
+1254×1254. Two changes:
 
-The square lockup already contains the "Révélez votre beauté" line, so the footer only
-prints `site.baseline` as text when no square file is set — otherwise it would say it
-twice.
+1. **Trimmed the transparent padding.** The horizontal file's artwork was only
+   1268×602 inside a 2172×724 canvas — roughly 20% dead space each side. That padding
+   counts toward the CSS height, so the logo rendered about a fifth smaller than the
+   space it occupied. Cropping to the artwork means `h-14` really is 56px of logo. The
+   trim also changes the true aspect ratio from 3.00 to 2.105, which is why `width`
+   and `height` read the way they do.
+2. **Resized and re-encoded as lossless WebP.** 437KB and 439KB became 165KB and
+   125KB with no quality loss. Sizes were chosen for the largest place each is used,
+   with 3× headroom for high-density screens.
 
-`width`/`height` must match the file's real dimensions — they reserve the space
-while it loads so the header doesn't jump. Until `src` is set, the header and footer
-fall back to a typographic "Zineb. HAIR & BEAUTY" set in the site's own fonts, so
-nothing looks broken in the meantime.
+The originals are untouched on your machine — keep them for print and for any future
+resize, since these web copies are downscaled.
 
-**Supply the logo with a transparent background — SVG for preference.** The page sits
-on cream (`#FBF6F2`), so a file with a baked-in white background shows as a white
-rectangle. If all you have is a flattened PNG or JPEG, set `whiteBackground: true`:
-the logo is then placed on a deliberate white rounded chip, which reads as a design
-choice instead of an accident. That's a stopgap, not the fix.
+**The header logo needs its height.** This lockup stacks three lines of text
+("Zineb.", "HAIR & BEAUTY", and the baseline). At the 40px I first tried, each line
+fell under 8px and turned to mush. 56px in an 80px bar is the working compromise; if
+you shrink it, the two smaller lines stop being readable.
 
-I first tried `mix-blend-mode: multiply` for this, which normally drops white out.
-It does not work here: the header is `position: fixed` with a `z-index`, so it forms
-its own stacking context and the image has nothing behind it to blend against — the
-white stayed visible. Hence the chip.
+### Icons
 
-Still to do once the real file is in place:
-- **Favicon** — `app/icon.svg` is a stand-in "Z". Replace it with the logo's monogram
-  (the Z-and-profile mark alone, not the full horizontal lockup, which is illegible at
-  32px).
-- **Share image** — add `app/opengraph-image.png` (1200×630) so links shared on
-  WhatsApp and Instagram show the brand rather than a blank card. This matters here:
-  the site's whole booking flow runs through WhatsApp.
+- `app/icon.svg` — the browser-tab favicon. **Deliberately not the real monogram.**
+  Tabs render favicons at 16–32px, and the illustrated mark (hair strands plus a face
+  in profile) is unreadable at that size — I rendered it at 16px to check. So the icon
+  keeps the brand's geometry and colours (espresso `#3d2317`, cream, a rose dot,
+  all sampled off the logo) in a shape that survives. Cream on espresso measures
+  13.5:1.
+- `app/apple-icon.png` — 180×180, and this one **is** the real monogram, cropped from
+  the horizontal lockup on a cream ground. At 180px the detail holds up. Opaque on
+  purpose: iOS flattens these, and transparency would render black.
 
 ### Adding photos
 

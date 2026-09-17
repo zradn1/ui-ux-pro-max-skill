@@ -211,42 +211,40 @@ export const site = {
 
   /* ── Logo ───────────────────────────────────────────────────────────────── */
   /**
-   * À COMPLÉTER — déposez le fichier du logo dans /public puis indiquez son
-   * chemin ci-dessous. Tant que `src` est vide, le site affiche un repli
-   * typographique (« Zineb. HAIR & BEAUTY ») : rien n'est cassé en attendant.
+   * Les deux déclinaisons fournies par le salon, préparées pour le web :
+   * le vide transparent autour du tracé a été recadré (sinon il compte dans
+   * la hauteur CSS et le logo s'affiche plus petit qu'il ne devrait), puis
+   * les fichiers ont été réduits et réenregistrés en WebP sans perte.
    *
-   * Format conseillé : SVG. Il reste net sur tous les écrans et pèse quelques
-   * kilo-octets. À défaut, un PNG à fond transparent d'au moins 1200 px de large.
+   * Les originaux étaient des PNG de 2172x724 et 1254x1254, à fond déjà
+   * transparent — d'où `whiteBackground: false`.
    */
   logo: {
     /**
-     * Version HORIZONTALE (lockup large, ~3:1) — utilisée dans l'en-tête.
+     * Version HORIZONTALE (~2,1:1 après recadrage) — utilisée dans l'en-tête.
      * C'est la seule qui fonctionne dans une barre de 80 px de haut : une
      * version carrée y ferait 40 px de large et serait illisible.
      */
-    src: "",
+    src: "/logo-horizontal.webp",
     /** Dimensions réelles du fichier, en pixels. Elles réservent la place
      *  pendant le chargement et évitent que la page « saute ». */
-    width: 2000,
-    height: 654,
+    width: 1000,
+    height: 475,
     /**
-     * Version CARRÉE / EMPILÉE (~1:1) — utilisée dans le pied de page, où la
-     * hauteur ne manque pas et où le logo complet a plus de présence.
-     * Laisser vide pour réutiliser la version horizontale partout.
+     * Version CARRÉE (~1:1) — utilisée dans le pied de page, où la hauteur
+     * ne manque pas et où le logo complet a plus de présence. Elle porte la
+     * signature « Révélez votre beauté », que le pied de page ne répète donc
+     * pas en texte. Laisser vide pour réutiliser l'horizontale partout.
      */
-    stackedSrc: "",
-    stackedWidth: 1250,
-    stackedHeight: 1250,
+    stackedSrc: "/logo-square.webp",
+    stackedWidth: 700,
+    stackedHeight: 698,
     /**
-     * Le fichier DOIT idéalement avoir un fond transparent : c'est la seule
-     * façon que le logo se pose proprement sur le crème du site.
+     * Les fichiers ont un vrai fond transparent : rien à compenser.
      *
-     * Si vous n'avez qu'un fichier à fond blanc (JPEG, PNG aplati), mettez
-     * `true` : le logo est alors présenté sur une pastille blanche arrondie,
-     * ce qui se lit comme un choix graphique plutôt que comme un rectangle
-     * blanc oublié. C'est un dépannage, pas la bonne réponse — demandez le
-     * logo en SVG ou en PNG transparent dès que possible, puis repassez à
-     * `false`.
+     * À ne passer à `true` que si on repart un jour d'un fichier à fond blanc
+     * opaque (JPEG, PNG aplati) : le logo est alors posé sur une pastille
+     * blanche arrondie, faute de pouvoir détourer le blanc de façon fiable.
      */
     whiteBackground: false,
   },

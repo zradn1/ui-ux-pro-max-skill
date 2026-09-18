@@ -14,7 +14,7 @@ export type Service = {
   name: string;
   /**
    * Courte description. Optionnelle : laissée vide quand le nom du service ne
-   * suffit pas à décrire la prestation sans inventer de protocole. La ligne
+   * suffit pas à décrire la prestation sans inventer de protocole. La carte
    * s'affiche très bien sans.
    */
   description?: string;

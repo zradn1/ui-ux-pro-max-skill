@@ -152,7 +152,7 @@ guess.
 | Soin cheveux | — | Already its own summary; anything more would specify a protocol |
 | Cils | — | Could be extensions, a lash lift or a tint — writing one would be a guess |
 
-The rows are built so a missing description simply closes up. If the salon tells you
+The cards are built so a missing description simply closes up. If the salon tells you
 what "Cils" and "Soin cheveux" actually cover, add the text and it appears.
 
 ### The logo

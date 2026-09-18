@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { site } from "@/content/site";
 import { whatsappUrl } from "@/lib/booking";
-import { WhatsAppIcon } from "./Icons";
+import { ArrowIcon, WhatsAppIcon } from "./Icons";
 import Logo from "./Logo";
+import SocialLinks from "./SocialLinks";
 
 const links = [
   { href: "#prestations", label: "Prestations" },
@@ -107,12 +108,28 @@ export default function Header() {
         </button>
       </div>
 
+      {/*
+        Panneau plein écran sous la barre de 80 px.
+
+        Il ne faisait avant que la hauteur de son contenu : la page restait
+        visible en dessous, et selon la position de défilement on y voyait les
+        boutons du héros — dont son propre « Réserver sur WhatsApp ». Le menu
+        semblait donc contenir le CTA en double alors qu'il ne l'a qu'une fois.
+        Couvrir toute la hauteur règle la confusion à la source.
+      */}
       <div
         id="menu-mobile"
         hidden={!open}
-        className="border-t border-line bg-cream lg:hidden"
+        // Hauteur explicite plutôt que `fixed` : l'en-tête porte un
+        // `backdrop-blur`, qui crée un bloc conteneur et ancrerait un enfant
+        // `fixed` sur l'en-tête (80 px) au lieu du viewport — le panneau
+        // n'aurait alors qu'un pixel de haut.
+        className="min-h-[calc(100vh-5rem)] overflow-y-auto overscroll-contain border-t border-line bg-cream lg:hidden"
       >
-        <nav aria-label="Navigation mobile" className="mx-auto max-w-6xl px-5 py-6 sm:px-8">
+        <nav
+          aria-label="Navigation mobile"
+          className="mx-auto flex max-w-6xl flex-col px-5 py-6 sm:px-8"
+        >
           <ul className="flex flex-col">
             {links.map((l) => (
               <li key={l.href}>
@@ -126,6 +143,7 @@ export default function Header() {
               </li>
             ))}
           </ul>
+
           <a
             href={whatsappUrl()}
             target="_blank"
@@ -136,6 +154,23 @@ export default function Header() {
             <WhatsAppIcon className="h-5 w-5" />
             Réserver sur WhatsApp
           </a>
+
+          <a
+            href="#prestations"
+            onClick={() => setOpen(false)}
+            className="group mt-3 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-full border border-line bg-white/60 px-6 py-4 text-base font-medium text-ink transition-colors hover:border-rose hover:text-rose"
+          >
+            Voir les prestations
+            <ArrowIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </a>
+
+          {/* Aligné sous les boutons, pas collé en bas du panneau : sur un
+              grand écran, il se retrouverait isolé à plusieurs centaines de
+              pixels du reste du menu. */}
+          <SocialLinks
+            className="flex flex-wrap items-center gap-x-6 pt-10"
+            itemClassName="inline-flex min-h-11 items-center gap-2 text-sm text-muted transition-colors hover:text-rose"
+          />
         </nav>
       </div>
     </header>

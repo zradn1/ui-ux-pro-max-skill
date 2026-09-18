@@ -56,6 +56,14 @@ export function TikTokIcon({ className = "h-5 w-5" }: IconProps) {
   );
 }
 
+export function StarIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.4l-5.8 3.06 1.1-6.46-4.69-4.58 6.49-.94L12 2.6Z" />
+    </svg>
+  );
+}
+
 export function MapPinIcon({ className = "h-5 w-5" }: IconProps) {
   return (
     <svg

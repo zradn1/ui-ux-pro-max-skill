@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import Gallery from "@/components/Gallery";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import Location from "@/components/Location";
 import Services from "@/components/Services";
 import Testimonials from "@/components/Testimonials";
 import Visit from "@/components/Visit";
@@ -22,6 +23,7 @@ export default function Home() {
         <BeforeAfter />
         <Testimonials />
         <Visit />
+        <Location />
         <CallToAction />
       </main>
       <Footer />

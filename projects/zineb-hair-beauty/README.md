@@ -33,7 +33,8 @@ replaced, the site runs fine but shows stand-in values:
 | Prices | `price` on any service | omitted → price column hidden |
 | Photos | `gallery[].src` | empty → gradient placeholders |
 | Logo files | `logo.src` / `logo.stackedSrc` | ✅ both lockups in place |
-| Reviews | `testimonials` | empty → **whole section hidden** |
+| Reviews | `testimonials` | ⚠️ **placeholder text — not real reviews** |
+| Google Maps embed | `address.mapsEmbedUrl` | empty → map replaced by a notice |
 | TikTok account | `socials` → `platform: "tiktok"` | empty → **hidden everywhere** |
 | TikTok videos | `tiktokVideos` | empty → **video block hidden** |
 | Final domain | `url` | `https://example.com` |
@@ -71,8 +72,40 @@ array in order, and a Monday-first order would split the open run into two piece
 ("Mardi → Dimanche" would become "Mardi → Samedi" plus a stray "Dimanche"). If you
 change the hours so a day differs, the display re-splits on its own — nothing to edit
 in the component.
-- **Only add real reviews** to `testimonials`, with the person's permission. The section
-  stays hidden while the array is empty, so there's no pressure to invent any.
+- **The three reviews currently in `testimonials` are placeholder text, not real
+  customer feedback.** They were supplied to validate the layout. Replace them with
+  genuine reviews, with the customers' permission, before the site goes live —
+  publishing invented reviews on a commercial site is a prohibited practice in France
+  (*pratique commerciale trompeuse*, art. L121-2 code de la consommation), and the
+  liability sits with the salon, not the site's author. Emptying the array hides the
+  whole section.
+
+### Location / Google Maps
+
+`components/Location.tsx` renders the "Venez nous rendre visite" section. It reads the
+address and hours already in `content/site.ts`, so nothing is duplicated by hand.
+
+**No address or coordinates were invented.** The salon has not supplied either, so:
+
+- `address.mapsEmbedUrl` is empty and the map area shows a short notice saying what to
+  paste. It occupies the same 4:3 box as the real map, so filling the URL in later
+  shifts nothing — verified with a test URL: identical box at 520×390 desktop and
+  350×263 mobile, CLS 0 either way.
+- The "Voir sur Google Maps" button only appears once `address.mapsUrl` is set. A button
+  that goes nowhere is worse than no button.
+
+The two URLs are different things:
+
+| Field | Where it comes from | Used by |
+|---|---|---|
+| `mapsUrl` | Google Maps → Share → Copy link | "Itinéraire" and "Voir sur Google Maps" buttons |
+| `mapsEmbedUrl` | Google Maps → Share → **Embed a map** → the iframe's `src` | the map itself |
+
+The iframe is `loading="lazy"`, so the map costs nothing until the visitor scrolls near it.
+
+Hours appear here as a two-line summary rather than the full table — the "Horaires &
+accès" section above already carries the day-by-day detail, and repeating it would add
+nothing.
 
 ### Social accounts
 

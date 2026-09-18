@@ -28,7 +28,10 @@ export type ServiceGroup = {
 
 export type Testimonial = {
   quote: string;
+  /** Prénom seul : on n'affiche pas le nom complet d'une cliente. */
   author: string;
+  /** Note sur 5. */
+  rating: number;
 };
 
 /** Vidéo TikTok intégrée à la galerie. */
@@ -193,10 +196,37 @@ const services: ServiceGroup[] = [
 ];
 
 /* ── Avis clientes ───────────────────────────────────────────────────────────
-   À COMPLÉTER — n'ajoutez que de vrais avis, avec l'accord de la personne.
-   Tant que ce tableau est vide, la section n'apparaît pas sur le site.
+   ⚠️  AVIS PROVISOIRES — CONTENU D'ATTENTE, PAS DE VRAIS TÉMOIGNAGES.
+
+   Ces trois avis ont été fournis comme contenu de remplissage pour valider la
+   mise en page. Ce ne sont pas des retours de clientes réelles.
+
+   À remplacer par de véritables avis, avec l'accord des personnes, avant la
+   mise en ligne. Publier de faux avis sur un site commercial est interdit en
+   France (pratique commerciale trompeuse, art. L121-2 du code de la
+   consommation) et le salon serait le responsable, pas l'auteur du site.
+
+   Vider le tableau masque entièrement la section.
    ─────────────────────────────────────────────────────────────────────────── */
-const testimonials: Testimonial[] = [];
+const testimonials: Testimonial[] = [
+  {
+    quote:
+      "Un résultat magnifique, mes cheveux sont beaucoup plus doux et brillants.",
+    author: "Sarah",
+    rating: 5,
+  },
+  {
+    quote:
+      "Très satisfaite du résultat. Une équipe professionnelle et à l'écoute.",
+    author: "Imane",
+    rating: 5,
+  },
+  {
+    quote: "Une vraie transformation. Je recommande sans hésiter.",
+    author: "Yasmine",
+    rating: 5,
+  },
+];
 
 export const site = {
   /* ── Identité ───────────────────────────────────────────────────────────── */
@@ -285,8 +315,25 @@ export const site = {
     country: "France",
     /** Code ISO 3166-1 alpha-2, utilisé par les données structurées. */
     countryCode: "FR",
-    /** À COMPLÉTER — lien « Partager » depuis Google Maps. Vide = carte masquée. */
+    /**
+     * À COMPLÉTER — lien « Partager » depuis Google Maps (celui qui s'ouvre
+     * dans l'application). Alimente les boutons « Itinéraire » et « Voir sur
+     * Google Maps ». Vide = ces boutons sont masqués.
+     */
     mapsUrl: "",
+    /**
+     * À COMPLÉTER — URL d'INTÉGRATION de la carte, différente de `mapsUrl`.
+     *
+     * Sur Google Maps : Partager > Intégrer une carte > copier le contenu de
+     * l'attribut `src` de l'iframe. Elle commence par
+     * « https://www.google.com/maps/embed?pb=… ».
+     *
+     * Aucune adresse ni coordonnée n'a été communiquée pour ce salon : rien
+     * n'est deviné ici. Tant que ce champ est vide, la section affiche un
+     * encadré expliquant quoi coller, au même format que la carte, pour que
+     * la mise en page ne bouge pas une fois l'URL renseignée.
+     */
+    mapsEmbedUrl: "",
   },
 
   /* ── Horaires ───────────────────────────────────────────────────────────── */
@@ -348,6 +395,14 @@ export const site = {
 
   /* ── Prestations (voir le tableau `services` plus haut) ──────────────── */
   services,
+
+  /* ── Nous trouver ───────────────────────────────────────────────────────── */
+  location: {
+    eyebrow: "Nous trouver",
+    title: "Venez nous rendre visite",
+    subtitle:
+      "Retrouvez-nous au salon et profitez d'une expérience beauté personnalisée.",
+  },
 
   /* ── Avant / Après ──────────────────────────────────────────────────────── */
   /**

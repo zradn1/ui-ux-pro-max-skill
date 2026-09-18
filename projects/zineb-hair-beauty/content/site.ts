@@ -349,6 +349,40 @@ export const site = {
   /* ── Prestations (voir le tableau `services` plus haut) ──────────────── */
   services,
 
+  /* ── Avant / Après ──────────────────────────────────────────────────────── */
+  /**
+   * Comparatif photo. Les deux clichés sont fournis par le salon et utilisés
+   * tels quels : uniquement redimensionnés (1200 px de large) et réencodés en
+   * WebP qualité 90, sans recadrage ni retouche. Les proportions d'origine de
+   * chaque photo sont conservées au pixel près.
+   *
+   * Les deux sources sont en 3:4, ce qui permet de les afficher à hauteur
+   * égale côte à côte sans rien couper.
+   *
+   * `width` / `height` sont les dimensions réelles des fichiers : combinées au
+   * cadre en `aspect-3/4`, elles évitent tout décalage de mise en page pendant
+   * le chargement.
+   */
+  beforeAfter: {
+    eyebrow: "Avant / Après",
+    title: "Le résultat, sans retouche",
+    note: "Photos prises au salon, avant et après la prestation. Aucun filtre, aucune retouche.",
+    before: {
+      src: "/avant.webp",
+      width: 1200,
+      height: 1601,
+      label: "Avant",
+      alt: "Cheveux longs très frisés et secs, vus de dos, avant la prestation.",
+    },
+    after: {
+      src: "/apres.webp",
+      width: 1200,
+      height: 1600,
+      label: "Après",
+      alt: "Les mêmes cheveux lissés et brillants, avec des mèches blondes, vus de dos, après la prestation.",
+    },
+  },
+
   /* ── Galerie ────────────────────────────────────────────────────────────── */
   /**
    * À COMPLÉTER — remplacez chaque `src` par une vraie photo placée dans

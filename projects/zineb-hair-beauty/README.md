@@ -179,6 +179,39 @@ you shrink it, the two smaller lines stop being readable.
   the horizontal lockup on a cream ground. At 180px the detail holds up. Opaque on
   purpose: iOS flattens these, and transparency would render black.
 
+### Avant / Après
+
+`beforeAfter` in `content/site.ts` drives the comparison section, rendered by
+`components/BeforeAfter.tsx`. Both photos are the salon's own, used as supplied: no
+crop, no retouch. They were only resized to 1200px wide and re-encoded as WebP at
+quality 90.
+
+| | File | Source | Optimised |
+|---|---|---|---|
+| Avant | `avant.webp` | 1440×1921 JPEG, 701 KB | 1200×1601, 468 KB |
+| Après | `apres.webp` | 1440×1920 JPEG, 449 KB | 1200×1600, 284 KB |
+
+Quality 90 rather than something smaller because the "avant" photo is dense frizzy
+hair texture, exactly where WebP artefacts show. Measured against the resized
+original: mean error 1.64/255, max 14 — visually identical at 1:1. Quality 82 would
+have saved 140 KB but visibly softened individual strands.
+
+Both sources are 3:4, so they sit side by side at equal height with nothing cropped.
+The frames carry `aspect-3/4` and the images fill them, which reserves the space
+before the files arrive — **measured CLS is 0 at 1440, 768 and 390px.**
+
+The layout stays side by side on mobile: stacking would lose the at-a-glance
+comparison that is the whole point. At 390px each photo is 170px wide, where the
+frizzy-versus-smooth contrast still reads clearly.
+
+Labels are CSS overlays, never baked into the photos — opaque pills rather than a
+gradient scrim, which would darken the hair and look artificial. The reveal uses the
+existing `Reveal` component, so it already honours `prefers-reduced-motion` (verified:
+content renders at full opacity with motion reduced).
+
+To swap the photos: replace the two files in `public/`, and update `width`/`height` in
+`content/site.ts` to the new files' real dimensions.
+
 ### Adding photos
 
 1. Drop the images in `public/gallery/`.

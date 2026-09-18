@@ -12,12 +12,18 @@
 
 export type Service = {
   name: string;
-  /**
-   * Courte description. Optionnelle : laissée vide quand le nom du service ne
-   * suffit pas à décrire la prestation sans inventer de protocole. La carte
-   * s'affiche très bien sans.
-   */
-  description?: string;
+  description: string;
+  /** Durée indicative, ex. « 45 min ». Laisser vide pour masquer. */
+  duration?: string;
+  /** Ex. « dès 250 DH ». Laisser vide tant que les tarifs ne sont pas validés. */
+  price?: string;
+};
+
+export type ServiceGroup = {
+  id: string;
+  title: string;
+  intro: string;
+  items: Service[];
 };
 
 export type Testimonial = {
@@ -82,33 +88,107 @@ const socials: Social[] = [
 const tiktokVideos: TikTokVideo[] = [];
 
 /* ── Prestations ─────────────────────────────────────────────────────────────
-   Les 4 services réellement proposés par le salon, confirmés par la cliente.
-   Ne rien ajouter ici sans confirmation : la liste précédente, plus longue,
-   ne correspondait pas à la réalité du salon.
-
-   Aucun prix ni aucune durée : ces informations n'ont pas été communiquées, et
-   les champs correspondants n'existent plus dans le type `Service`.
-
-   Les descriptions se limitent à ce que le nom du service implique déjà.
-   « Soin cheveux » et « Cils » restent sans description : le premier est son
-   propre résumé, et le second peut désigner une extension, un rehaussement ou
-   une teinture — l'écrire serait deviner. À compléter par le salon.
+   Adaptez librement : ajoutez, renommez ou supprimez groupes et lignes.
    ─────────────────────────────────────────────────────────────────────────── */
-const services: Service[] = [
+const services: ServiceGroup[] = [
   {
-    name: "Balayage Ombré",
-    description:
-      "Éclaircissement progressif des longueurs, en dégradé fondu et sans démarcation.",
+    id: "coiffure",
+    title: "Coiffure",
+    intro: "Coupe, brushing et mise en forme, adaptés à votre nature de cheveu.",
+    items: [
+      {
+        name: "Coupe & brushing",
+        description:
+          "Diagnostic, shampooing traitant, coupe sur mesure et finition au brushing.",
+        duration: "1 h",
+      },
+      {
+        name: "Brushing & mise en plis",
+        description:
+          "Lissage, boucles ou volume selon l'effet souhaité, avec protection thermique.",
+        duration: "45 min",
+      },
+      {
+        name: "Coiffure de mariée & événement",
+        description:
+          "Essai préalable, coiffure tenue longue durée et retouches le jour J.",
+        duration: "sur devis",
+      },
+    ],
   },
   {
-    name: "Protéine",
-    description: "Soin à base de protéines, pour renforcer la fibre.",
+    id: "couleur",
+    title: "Couleur",
+    intro: "Couleur, mèches et balayage, avec un protocole qui préserve la fibre.",
+    items: [
+      {
+        name: "Coloration",
+        description:
+          "Couleur racines ou longueurs, teinte choisie ensemble après test de compatibilité.",
+        duration: "1 h 30",
+      },
+      {
+        name: "Balayage & mèches",
+        description:
+          "Éclaircissement progressif pour un rendu naturel et un entretien espacé.",
+        duration: "2 h 30",
+      },
+      {
+        name: "Patine & gloss",
+        description:
+          "Ravive la couleur, neutralise les reflets indésirables et apporte de la brillance.",
+        duration: "30 min",
+      },
+    ],
   },
   {
-    name: "Soin cheveux",
+    id: "soins",
+    title: "Soins",
+    intro: "Des protocoles ciblés pour réparer, hydrater et faire tenir la couleur.",
+    items: [
+      {
+        name: "Soin profond réparateur",
+        description:
+          "Reconstruction de la fibre après décoloration, chaleur ou lissage.",
+        duration: "45 min",
+      },
+      {
+        name: "Soin hydratant & anti-frisottis",
+        description:
+          "Hydratation en profondeur, idéale pour les cheveux bouclés ou secs.",
+        duration: "45 min",
+      },
+      {
+        name: "Traitement cuir chevelu",
+        description:
+          "Gommage et massage pour assainir le cuir chevelu et stimuler la pousse.",
+        duration: "30 min",
+      },
+    ],
   },
   {
-    name: "Cils",
+    id: "beaute",
+    title: "Beauté & esthétique",
+    intro: "Les finitions qui complètent la prestation coiffure.",
+    items: [
+      {
+        name: "Manucure & pose",
+        description: "Mise en beauté des ongles, vernis classique ou semi-permanent.",
+        duration: "1 h",
+      },
+      {
+        name: "Soin du visage",
+        description:
+          "Nettoyage, gommage et masque adaptés à votre type de peau.",
+        duration: "1 h",
+      },
+      {
+        name: "Épilation & sourcils",
+        description:
+          "Épilation à la cire et restructuration des sourcils.",
+        duration: "30 min",
+      },
+    ],
   },
 ];
 
